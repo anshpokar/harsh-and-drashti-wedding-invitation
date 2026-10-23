@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { wedding } from '../config/wedding';
-import { showPlaceholders } from '../lib/content';
+import { daysToWedding, showPlaceholders } from '../lib/content';
 import { dateParts } from '../lib/format';
+import { gsap, reducedMotion, useGSAP } from '../lib/gsap';
 import { SectionTitle } from './Ornaments';
 import { Reveal } from './Reveal';
 
@@ -50,6 +51,44 @@ export function ScratchDateCard() {
   const drawing = useRef(false);
   const last = useRef<{ x: number; y: number } | null>(null);
   const strokes = useRef(0);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const days = daysToWedding();
+
+  // The reveal moment: foil dissolves, date pops, sparks burst, countdown ticks up.
+  useGSAP(
+    () => {
+      if (!revealed) return;
+      const q = gsap.utils.selector(cardRef);
+      if (reducedMotion()) {
+        gsap.set(q('.scratch-canvas'), { autoAlpha: 0 });
+        return;
+      }
+      const tl = gsap.timeline();
+      tl.to(q('.scratch-canvas'), { autoAlpha: 0, scale: 1.08, duration: 0.7, ease: 'power2.in' })
+        .from(q('.scratch-day'), { scale: 0.3, rotation: -12, duration: 1.2, ease: 'elastic.out(1, 0.45)' }, 0.3)
+        .from(q('.scratch-weekday, .scratch-month, .scratch-muhurat, .scratch-message'), { autoAlpha: 0, y: 10, stagger: 0.1, duration: 0.7 }, 0.5)
+        .to(cardRef.current, { keyframes: { rotation: [0, -1.5, 1.5, -0.8, 0] }, duration: 0.6, ease: 'none' }, 0.3);
+      q('.spark').forEach((el, i) => {
+        const angle = (i / 18) * Math.PI * 2;
+        const dist = gsap.utils.random(90, 170);
+        tl.fromTo(
+          el,
+          { x: 0, y: 0, scale: 0, autoAlpha: 1 },
+          { x: Math.cos(angle) * dist, y: Math.sin(angle) * dist, scale: gsap.utils.random(0.8, 1.8), rotation: 180, autoAlpha: 0, duration: 1.4, ease: 'expo.out' },
+          0.35,
+        );
+      });
+      const counter = q('.countdown-num')[0];
+      if (counter && days !== null) {
+        const obj = { n: 0 };
+        tl.fromTo(q('.countdown'), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.6 }, 1)
+          .to(obj, { n: days, duration: 1.6, ease: 'power2.out', onUpdate: () => {
+            counter.textContent = String(Math.round(obj.n));
+          } }, 1);
+      }
+    },
+    { scope: cardRef, dependencies: [revealed] },
+  );
 
   const setup = useCallback(() => {
     const c = canvasRef.current;
@@ -127,12 +166,13 @@ export function ScratchDateCard() {
   const parts = weddingDate ? dateParts(weddingDate) : null;
 
   return (
-    <section id="date" className="scene royal date">
+    <section id="date" className="scene paper paper--alt date">
       <SectionTitle eyebrow="A Special Date Awaits" title="Save the Date">
         Scratch to reveal our wedding date
       </SectionTitle>
 
-      <Reveal className={`scratch-card ${revealed ? 'is-revealed' : ''}`}>
+      <Reveal>
+        <div ref={cardRef} className={`scratch-card ${revealed ? 'is-revealed' : ''}`}>
         <div className="scratch-content" aria-live="polite">
           {parts ? (
             <>
@@ -150,13 +190,16 @@ export function ScratchDateCard() {
           )}
           {muhurat ? <p className="scratch-muhurat">{muhurat}</p> : showPlaceholders && <p className="pending">Muhurat: to be provided</p>}
           <p className="scratch-message">{dateMessage}</p>
-          {revealed && (
-            <div className="sparkles" aria-hidden="true">
-              {Array.from({ length: 14 }, (_, i) => (
-                <i key={i} style={{ '--i': i } as React.CSSProperties} />
-              ))}
-            </div>
+          {days !== null && days > 0 && (
+            <p className="countdown">
+              <span className="countdown-num">{days}</span> {days === 1 ? 'day' : 'days'} to go
+            </p>
           )}
+          <div className="sparkles" aria-hidden="true">
+            {Array.from({ length: 18 }, (_, i) => (
+              <i key={i} className="spark" />
+            ))}
+          </div>
         </div>
         <canvas
           ref={canvasRef}
@@ -167,6 +210,7 @@ export function ScratchDateCard() {
           onPointerUp={onUp}
           onPointerCancel={onUp}
         />
+        </div>
       </Reveal>
 
       {!revealed && (

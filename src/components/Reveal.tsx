@@ -1,27 +1,30 @@
-import type { CSSProperties, ElementType, ReactNode } from 'react';
-import { useInView } from '../lib/hooks';
+import { useRef, type ElementType, type ReactNode } from 'react';
+import { gsap, onEnter, reducedMotion, useGSAP } from '../lib/gsap';
 
-/** Adds `is-visible` when scrolled into view; animation lives in CSS. */
+/** Fades + rises its content in once it scrolls into view (GSAP ScrollTrigger). */
 export function Reveal({
   as: Tag = 'div',
   children,
   className = '',
   delay = 0,
-  threshold,
+  y = 32,
 }: {
   as?: ElementType;
   children: ReactNode;
   className?: string;
   delay?: number;
-  threshold?: number;
+  y?: number;
 }) {
-  const [ref, inView] = useInView<HTMLElement>(threshold);
+  const ref = useRef<HTMLElement>(null);
+  useGSAP(
+    () => {
+      if (reducedMotion()) return;
+      gsap.from(ref.current, { autoAlpha: 0, y, duration: 1.1, delay: delay / 1000, scrollTrigger: onEnter(ref.current, 'top 88%') });
+    },
+    { scope: ref },
+  );
   return (
-    <Tag
-      ref={ref}
-      className={`reveal-block ${inView ? 'is-visible' : ''} ${className}`}
-      style={{ '--delay': `${delay}ms` } as CSSProperties}
-    >
+    <Tag ref={ref} className={className}>
       {children}
     </Tag>
   );

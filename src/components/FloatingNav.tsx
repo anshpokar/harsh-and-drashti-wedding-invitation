@@ -25,18 +25,20 @@ export function FloatingNav() {
   ];
 
   return (
-    <nav className="floating-nav" aria-label="Quick links">
-      {links.map(([href, label]) => (
-        <a key={href} href={href}>
-          {label}
-        </a>
-      ))}
+    <>
+      <nav className="floating-nav" aria-label="Quick links">
+        {links.map(([href, label]) => (
+          <a key={href} href={href}>
+            {label}
+          </a>
+        ))}
+      </nav>
       {music.src && (
-        <button onClick={toggle} aria-pressed={playing} aria-label={playing ? 'Mute music' : 'Play music'}>
-          {playing ? '♪ On' : '♪ Off'}
+        <button className={`vinyl ${playing ? 'is-playing' : ''}`} onClick={toggle} aria-pressed={playing} aria-label={playing ? 'Pause music' : 'Play music'}>
+          <span className="vinyl-label" />
         </button>
       )}
-    </nav>
+    </>
   );
 }
 

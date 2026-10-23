@@ -1,62 +1,71 @@
+import { useRef } from 'react';
 import { wedding, type FamilySide } from '../config/wedding';
 import { showPlaceholders } from '../lib/content';
+import { gsap, onEnter, reducedMotion, useGSAP } from '../lib/gsap';
 import { Divider, Pending, PhotoFrame, SectionTitle } from './Ornaments';
-import { Reveal } from './Reveal';
 
 function hasContent(f: FamilySide) {
-  return Boolean(f.familyName || f.parents || f.grandparents || f.members.length || f.message || f.photo);
+  return Boolean(f.familyName || f.parents || f.blessings.length || f.message || f.photo);
 }
 
-function FamilyCard({ family, delay }: { family: FamilySide; delay: number }) {
+function FamilyCard({ family }: { family: FamilySide }) {
   return (
-    <Reveal as="article" className="family-card" delay={delay}>
+    <article className={`family-card family-card--${family.side}`}>
       <p className="eyebrow">{family.heading}</p>
-      {family.familyName ? <h3 className="gold-text family-name">{family.familyName}</h3> : <Pending label="Family name" block />}
+      {family.familyName ? <h3 className="family-name">{family.familyName}</h3> : <Pending label="Family name" block />}
       {family.city && <p className="family-city">{family.city}</p>}
       <PhotoFrame photo={family.photo} shape="rect" label="Family photograph" className="family-photo" />
       <Divider />
-      <dl className="family-details">
-        {family.grandparents ? (
-          <>
-            <dt>With the blessings of</dt>
-            <dd>{family.grandparents}</dd>
-          </>
-        ) : (
-          <Pending label="Grandparents (optional)" block />
-        )}
+      <dl className="blessing-list">
         {family.parents ? (
-          <>
-            <dt>{family.side === 'groom' ? 'Son of' : 'Daughter of'}</dt>
+          <div className="blessing-group">
+            <dt>Parents</dt>
             <dd>{family.parents}</dd>
-          </>
+          </div>
         ) : (
           <Pending label="Parents' names" block />
         )}
-        {family.members.map((m) => (
-          <div key={m.name} className="family-member">
-            {m.relation && <dt>{m.relation}</dt>}
-            <dd>{m.name}</dd>
+        {family.blessings.map((b) => (
+          <div key={b.relation} className="blessing-group">
+            <dt>{b.relation}</dt>
+            <dd>{b.names}</dd>
           </div>
         ))}
+        {!family.blessings.length && <Pending label="Grandparents, siblings, nieces & nephews" block />}
       </dl>
       {family.message && <p className="family-message">{family.message}</p>}
-    </Reveal>
+    </article>
   );
 }
 
-/** Scene 7: two families, one beautiful beginning. */
+/** Scene 7: "With Blessings From" — both families, relation by relation. */
 export function FamilyIntroduction() {
   const families = wedding.families.filter((f) => showPlaceholders || hasContent(f));
+  const ref = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      if (reducedMotion()) return;
+      gsap.utils.toArray<HTMLElement>('.family-card', ref.current).forEach((card, i) => {
+        const q = gsap.utils.selector(card);
+        gsap
+          .timeline({ scrollTrigger: onEnter(card, 'top 82%') })
+          .from(card, { autoAlpha: 0, x: i % 2 ? 60 : -60, rotation: i % 2 ? 2 : -2, duration: 1.2 })
+          .from(q('.family-name'), { autoAlpha: 0, letterSpacing: '0.5em', duration: 1.2 }, 0.3)
+          .from(q('.blessing-group, .pending'), { autoAlpha: 0, y: 14, stagger: 0.12, duration: 0.7 }, 0.6);
+      });
+    },
+    { scope: ref },
+  );
+
   if (!families.length) return null;
   return (
-    <section id="families" className="scene parchment families">
-      <div className="parchment-border">
-        <SectionTitle eyebrow="With love and blessings" title="Two Families. One Beautiful Beginning." />
-        <div className="family-grid">
-          {families.map((f, i) => (
-            <FamilyCard key={f.side} family={f} delay={i * 200} />
-          ))}
-        </div>
+    <section ref={ref} id="families" className="scene paper families">
+      <SectionTitle eyebrow="With love" title="With Blessings From" />
+      <div className="family-grid">
+        {families.map((f) => (
+          <FamilyCard key={f.side} family={f} />
+        ))}
       </div>
     </section>
   );

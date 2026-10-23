@@ -1,81 +1,149 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { wedding } from '../config/wedding';
-import { useReducedMotion } from '../lib/hooks';
+import { gsap, nameRevealTimeline, reducedMotion, useGSAP } from '../lib/gsap';
 import { CoupleNameReveal } from './CoupleNameReveal';
 import { GoldDust } from './GoldDust';
 import { Toran } from './Ornaments';
-import { PalaceDoors, type DoorState } from './PalaceDoors';
+import { PalaceDoors } from './PalaceDoors';
 import { RibbonReveal } from './RibbonReveal';
 
-type Phase = 'closed' | 'releasing' | 'opening' | 'revealed' | 'leaving';
+type Phase = 'closed' | 'opening' | 'revealed' | 'leaving';
+type Q = (selector: string) => Element[];
 
-// Timeline for the CSS/SVG opening (ms after the guest taps).
-const T = { ribbon: 0, doors: 900, names: 2500, autoEnter: 9500, fade: 900 };
+/* ── Timeline pieces (seconds are relative to where each is placed) ── */
+
+function ribbonRelease(q: Q) {
+  return gsap
+    .timeline()
+    .to(q('.bow-loop--left'), { scaleX: 0.15, rotation: -25, transformOrigin: '100% 50%', duration: 0.5, ease: 'power2.in' }, 0)
+    .to(q('.bow-loop--right'), { scaleX: 0.15, rotation: 25, transformOrigin: '0% 50%', duration: 0.5, ease: 'power2.in' }, 0)
+    .to(q('.ribbon-bow'), { y: 170, rotation: 40, scale: 0.5, autoAlpha: 0, duration: 1, ease: 'power2.in' }, 0.3)
+    .to(q('.ribbon-band--left'), { xPercent: -30, y: 140, rotation: -35, autoAlpha: 0, transformOrigin: '0% 50%', duration: 1.3, ease: 'power2.in' }, 0.35)
+    .to(q('.ribbon-band--right'), { xPercent: 30, y: 140, rotation: 35, autoAlpha: 0, transformOrigin: '100% 50%', duration: 1.3, ease: 'power2.in' }, 0.35);
+}
+
+function doorsOpen(q: Q) {
+  return gsap
+    .timeline()
+    .to(q('.intro-copy'), { autoAlpha: 0, y: -20, duration: 0.6 }, 0)
+    .to(q('.door--left'), { rotationY: -108, filter: 'brightness(0.5)', duration: 2.4, ease: 'power3.inOut' }, 0)
+    .to(q('.door--right'), { rotationY: 108, filter: 'brightness(0.5)', duration: 2.4, ease: 'power3.inOut' }, 0)
+    .to(q('.doorway-light'), { autoAlpha: 1, duration: 1.6, ease: 'power1.out' }, 0.2);
+}
+
+function pushThroughAndReveal(q: Q) {
+  const names = q('.intro-names')[0];
+  return gsap
+    .timeline()
+    .to(q('.intro-stage'), { scale: 1.4, autoAlpha: 0.3, duration: 2.6, ease: 'power2.inOut' }, 0)
+    .to(q('.intro-bloom'), { autoAlpha: 1, duration: 2 }, 0)
+    .set(names, { autoAlpha: 1 }, 0.3)
+    .add(nameRevealTimeline(names), 0.3)
+    .from(q('.intro-enter'), { autoAlpha: 0, y: 16, duration: 1 }, '-=0.4');
+}
 
 /**
  * Scene 1 + 2: royal entrance → ribbon release → doors open → name reveal.
- * Works with or without the separately produced intro video.
+ * One GSAP master timeline; works with or without the separate intro video.
  */
 export function RoyalIntro({ onDone }: { onDone: () => void }) {
   const { intro } = wedding;
-  const reduced = useReducedMotion();
+  const root = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const finished = useRef(false);
+  const namesShown = useRef(false);
   const [phase, setPhase] = useState<Phase>('closed');
   const [videoFailed, setVideoFailed] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const timers = useRef<number[]>([]);
-  const useVideo = Boolean(intro.videoSrc) && !videoFailed && !reduced;
+  const useVideo = Boolean(intro.videoSrc) && !videoFailed && !reducedMotion();
   const showRibbon = !(useVideo && intro.videoIncludesRibbon);
 
-  const later = (fn: () => void, ms: number) => timers.current.push(window.setTimeout(fn, ms));
-  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+  const { contextSafe } = useGSAP(
+    () => {
+      const q = gsap.utils.selector(root);
+      gsap.set(q('.door'), { transformPerspective: 1200 });
+      gsap.set(q('.ribbon'), { xPercent: -50, yPercent: -50 });
+      gsap.set(q('.ribbon-bow'), { xPercent: -50, yPercent: -42 });
+      gsap.set(q('.intro-names, .doorway-light, .intro-bloom'), { autoAlpha: 0 });
+      if (reducedMotion()) return;
 
-  const finished = useRef(false);
-  const finish = useCallback(() => {
+      // Entrance: palace emerges from the dark, garland drops, ribbon stretches across.
+      gsap
+        .timeline()
+        .from(q('.palace, .palace-video-spacer'), { autoAlpha: 0, scale: 0.9, duration: 1.8, ease: 'power2.out' })
+        .from(q('.intro-toran'), { yPercent: -100, duration: 1.2 }, 0.2)
+        .from(q('.lantern'), { y: -140, duration: 1.4, ease: 'bounce.out', stagger: 0.15 }, 0.3)
+        .from(q('.intro-eyebrow'), { autoAlpha: 0, y: 16, letterSpacing: '0.7em', duration: 1.6 }, 0.5)
+        .from(q('.ribbon'), { scaleX: 0, duration: 1.2, ease: 'power2.inOut' }, 0.9)
+        .from(q('.ribbon-bow'), { scale: 0, rotation: -90, duration: 0.9, ease: 'back.out(2)' }, 1.6)
+        .from(q('.intro-prompt'), { autoAlpha: 0, y: 20, duration: 1 }, 1.8);
+
+      // Idle life while waiting for the tap.
+      gsap.to(q('.ribbon-bow'), { rotation: 3, scale: 1.05, duration: 1.5, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 2.5 });
+      gsap.to(q('.lantern'), { rotation: 4, transformOrigin: '50% 0%', duration: 2.4, yoyo: true, repeat: -1, ease: 'sine.inOut', stagger: 0.7 });
+    },
+    { scope: root },
+  );
+
+  const q: Q = (sel) => gsap.utils.toArray<Element>(root.current!.querySelectorAll(sel));
+
+  const finish = contextSafe(() => {
     if (finished.current) return;
     finished.current = true;
     setPhase('leaving');
-    later(onDone, reduced ? 200 : T.fade);
-  }, [onDone, reduced]);
+    gsap.to(root.current, { autoAlpha: 0, scale: 1.06, duration: reducedMotion() ? 0.2 : 1, ease: 'power2.inOut', onComplete: onDone });
+  });
 
-  const open = () => {
+  const revealNames = contextSafe(() => {
+    if (namesShown.current) return;
+    namesShown.current = true;
+    gsap
+      .timeline()
+      .add(pushThroughAndReveal(q))
+      .call(() => setPhase('revealed'), [], 0.5)
+      .call(finish, [], '+=4.5');
+  });
+
+  const playDoors = contextSafe((delay: number) => {
+    gsap.timeline({ delay }).add(doorsOpen(q)).add(revealNames, 1.5);
+  });
+
+  const open = contextSafe(() => {
     if (phase !== 'closed') return;
-    if (reduced) {
+    setPhase('opening');
+    gsap.killTweensOf(q('.ribbon-bow'));
+    gsap.to(q('.intro-prompt'), { autoAlpha: 0, duration: 0.4 });
+
+    if (reducedMotion()) {
+      gsap.set(q('.ribbon, .intro-stage'), { autoAlpha: 0.2 });
+      gsap.set(q('.intro-names'), { autoAlpha: 1 });
       setPhase('revealed');
-      later(finish, 2500);
+      gsap.delayedCall(2.5, finish);
       return;
     }
-    setPhase('releasing');
+    if (showRibbon) ribbonRelease(q);
     if (useVideo && videoRef.current) {
       videoRef.current.play().catch(() => setVideoFailed(true));
-      return; // video timeupdate / ended drive the rest
+      return; // timeupdate drives the names; `ended` finishes
     }
-    later(() => setPhase('opening'), T.doors);
-    later(() => setPhase('revealed'), T.names);
-    later(finish, T.autoEnter);
-  };
+    playDoors(0.9);
+  });
 
   const onTimeUpdate = () => {
     const v = videoRef.current;
-    if (!v) return;
-    if (v.currentTime >= intro.nameRevealAt) setPhase((p) => (p === 'leaving' ? p : 'revealed'));
-    else if (v.currentTime >= 0.9) setPhase((p) => (p === 'releasing' ? 'opening' : p));
+    if (v && v.currentTime >= intro.nameRevealAt) revealNames();
   };
 
-  // If the video can't play after tapping, continue with the CSS doors.
+  // Video couldn't play after the tap → continue with the SVG doors.
+  const fallbackStarted = useRef(false);
   useEffect(() => {
-    if (videoFailed && phase === 'releasing') {
-      later(() => setPhase('opening'), T.doors);
-      later(() => setPhase('revealed'), T.names);
-      later(finish, T.autoEnter);
+    if (videoFailed && phase === 'opening' && !fallbackStarted.current) {
+      fallbackStarted.current = true;
+      playDoors(0.3);
     }
-  }, [videoFailed, phase, finish]);
-
-  const doorState: DoorState = phase === 'closed' || phase === 'releasing' ? 'closed' : phase === 'opening' ? 'opening' : 'open';
-  const ribbonReleased = phase !== 'closed';
-  const namesVisible = phase === 'revealed' || phase === 'leaving';
+  }, [videoFailed, phase, playDoors]);
 
   return (
-    <div className={`intro intro--${phase} ${useVideo ? 'intro--video' : ''}`} role="dialog" aria-label="Wedding invitation opening">
+    <div ref={root} className={`intro intro--${phase}`} role="dialog" aria-label="Wedding invitation opening">
       <div className="intro-vignette" />
       {useVideo ? (
         <video
@@ -100,10 +168,11 @@ export function RoyalIntro({ onDone }: { onDone: () => void }) {
         </>
       )}
       <GoldDust density={55} className="intro-dust" />
+      <div className="intro-bloom" />
 
       <button className="intro-stage" onClick={open} aria-label="Tap to open the invitation" disabled={phase !== 'closed'}>
-        {useVideo ? <div className="palace palace--video" /> : <PalaceDoors state={doorState} />}
-        {showRibbon && <RibbonReveal released={ribbonReleased} />}
+        {useVideo ? <div className="palace palace-video-spacer" /> : <PalaceDoors />}
+        {showRibbon && <RibbonReveal />}
       </button>
 
       <div className="intro-copy">
@@ -111,20 +180,16 @@ export function RoyalIntro({ onDone }: { onDone: () => void }) {
       </div>
 
       <div className="intro-names" aria-live="polite">
-        {namesVisible && <CoupleNameReveal play />}
-        {namesVisible && (
-          <button className="btn btn--gold intro-enter" onClick={finish}>
-            Enter the Celebration
-          </button>
-        )}
+        <CoupleNameReveal />
+        <button className="btn btn--gold intro-enter" onClick={finish} tabIndex={phase === 'revealed' ? 0 : -1}>
+          Enter the Celebration
+        </button>
       </div>
 
-      {phase === 'closed' && (
-        <p className="intro-prompt">
-          <span className="tap-ring" aria-hidden="true" />
-          Tap to Open the Invitation
-        </p>
-      )}
+      <p className="intro-prompt">
+        <span className="tap-ring" aria-hidden="true" />
+        Tap to Open the Invitation
+      </p>
 
       <button className="intro-skip" onClick={finish}>
         Skip intro

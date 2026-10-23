@@ -1,45 +1,88 @@
+import { useRef } from 'react';
 import { wedding } from '../config/wedding';
-import { showPlaceholders } from '../lib/content';
-import { mapsSearchUrl } from '../lib/format';
-import { Divider, Pending, PhotoFrame, SectionTitle } from './Ornaments';
+import { eventMapsLink, homecomingEvent, showPlaceholders, venueMapsLink } from '../lib/content';
+import { gsap, onEnter, reducedMotion, useGSAP } from '../lib/gsap';
+import { CitySkyline } from './CitySkyline';
+import { Divider, Pending, PhotoFrame } from './Ornaments';
 import { Reveal } from './Reveal';
+import { PinIcon } from './WeddingTimeline';
 
-/** Scene 9: the Ahmedabad venue, travel guidance and contacts. */
+/** Scene 9: venue block in the reference style, the Ahmedabad skyline, travel and contacts. */
 export function VenueDetails() {
   const { venue, destination, origin, contacts } = wedding;
+  const ref = useRef<HTMLElement>(null);
+  const maps = venueMapsLink();
+  const reception = homecomingEvent;
+
+  useGSAP(
+    () => {
+      if (reducedMotion()) return;
+      const q = gsap.utils.selector(ref);
+      gsap
+        .timeline({ scrollTrigger: onEnter(q('.venue-block')[0], 'top 78%') })
+        .from(q('.venue-block .photo-frame'), { autoAlpha: 0, y: 30, duration: 1 })
+        .from(q('.venue-block .eyebrow'), { autoAlpha: 0, y: 8, duration: 0.6 }, 0.3)
+        .from(q('.venue-name'), { autoAlpha: 0, letterSpacing: '0.6em', duration: 1.4, ease: 'expo.out' }, 0.4)
+        .from(q('.venue-lines > *'), { autoAlpha: 0, y: 10, stagger: 0.12, duration: 0.7 }, 0.8)
+        .from(q('.venue-block .btn'), { autoAlpha: 0, scale: 0.8, duration: 0.7, ease: 'back.out(2)' }, 1.1);
+
+      // Skyline: the city rises out of the river, then its reflection settles.
+      gsap
+        .timeline({ scrollTrigger: onEnter(q('.skyline')[0], 'top 80%') })
+        .from(q('.sky-sun'), { scale: 0, transformOrigin: '50% 50%', duration: 1.4, ease: 'expo.out' })
+        .from(q('.sky-bld'), { scaleY: 0, transformOrigin: '50% 100%', stagger: { each: 0.06, from: 'center' }, duration: 1, ease: 'back.out(1.2)' }, 0.2)
+        .from(q('.sky-reflection'), { autoAlpha: 0, duration: 1.2 }, 0.9)
+        .from(q('.sky-kite'), { x: 60, y: 40, rotation: 30, autoAlpha: 0, duration: 1.6, ease: 'power2.out' }, 1)
+        .from(q('.skyline-name'), { autoAlpha: 0, letterSpacing: '1em', duration: 1.4, ease: 'expo.out' }, 1.1);
+      gsap.to(q('.sky-kite'), { x: -8, y: 6, rotation: -6, transformOrigin: '50% 100%', duration: 2.4, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+      gsap.to(q('.sky-ripple'), { x: 18, autoAlpha: 0.2, duration: 2.6, yoyo: true, repeat: -1, ease: 'sine.inOut', stagger: 0.5 });
+    },
+    { scope: ref },
+  );
+
   const hasVenue = Boolean(venue.name || venue.address);
   if (!hasVenue && !showPlaceholders && !contacts.length) return null;
-  const maps = venue.mapsUrl ?? (venue.address ? mapsSearchUrl(`${venue.name ?? ''} ${venue.address}`) : null);
+  const receptionMaps = reception ? eventMapsLink(reception) : null;
 
   return (
-    <section id="venue" className="scene royal venue">
-      <SectionTitle eyebrow={`${destination.city}, ${destination.state}`} title="The Wedding Venue" />
-
-      <Reveal as="article" className="venue-card">
+    <section ref={ref} id="venue" className="scene paper venue">
+      <div className="venue-block">
         <PhotoFrame photo={venue.image} shape="rect" label="Venue photograph" className="venue-photo" />
-        <div className="venue-body">
-          {venue.name ? <h3 className="gold-text venue-name">{venue.name}</h3> : <Pending label="Venue name" block />}
+        <p className="eyebrow">Venue</p>
+        {venue.name ? <h2 className="venue-name">{venue.name}</h2> : <Pending label="Venue name" block />}
+        <div className="venue-lines">
           {venue.address ? <address>{venue.address}</address> : <Pending label="Full address" block />}
-          <div className="venue-actions">
-            {maps && (
-              <a className="btn btn--gold" href={maps} target="_blank" rel="noopener noreferrer">
-                Open in Maps
-              </a>
-            )}
-            <a className="btn btn--ghost" href="#events">
-              View All Events
-            </a>
-            {contacts[0] && (
-              <a className="btn btn--ghost" href={`#contacts`}>
-                Contact the Family
-              </a>
-            )}
-          </div>
+          <p className="venue-city">{destination.city}</p>
+          <p className="venue-region">
+            {destination.state}, India
+          </p>
         </div>
-      </Reveal>
+        {maps && (
+          <a className="btn btn--pill" href={maps} target="_blank" rel="noopener noreferrer">
+            <PinIcon /> View on Maps
+          </a>
+        )}
+      </div>
+
+      <CitySkyline city={destination.city} />
+
+      {reception && (
+        <Reveal className="venue-also">
+          <p className="eyebrow">{reception.name} venue</p>
+          <p className="venue-also-name">{reception.venueName ?? (showPlaceholders ? <Pending label="Reception venue" /> : 'To be announced')}</p>
+          <p className="venue-region">
+            {origin.city}, {origin.state}
+          </p>
+          {receptionMaps && (
+            <a className="btn btn--pill" href={receptionMaps} target="_blank" rel="noopener noreferrer">
+              <PinIcon /> View on Maps
+            </a>
+          )}
+        </Reveal>
+      )}
 
       {(venue.travelNotes.length > 0 || showPlaceholders) && (
-        <Reveal className="info-block" delay={100}>
+        <Reveal className="info-block">
           <h3>Travelling to {destination.city}</h3>
           <Divider />
           {venue.travelNotes.length ? (
@@ -55,7 +98,7 @@ export function VenueDetails() {
       )}
 
       {(venue.accommodation || showPlaceholders) && (
-        <Reveal className="info-block" delay={150}>
+        <Reveal className="info-block">
           <h3>Stay</h3>
           <Divider />
           {venue.accommodation ? <p>{venue.accommodation}</p> : <Pending label="Accommodation (optional)" block />}
@@ -63,7 +106,7 @@ export function VenueDetails() {
       )}
 
       {(contacts.length > 0 || showPlaceholders) && (
-        <Reveal className="info-block" delay={200}>
+        <Reveal className="info-block">
           <h3 id="contacts">For Any Assistance</h3>
           <Divider />
           {contacts.length ? (

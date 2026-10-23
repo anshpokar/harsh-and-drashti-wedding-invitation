@@ -50,14 +50,14 @@ export function RSVPForm() {
   };
 
   return (
-    <section id="rsvp" className="scene parchment rsvp">
-      <div className="parchment-border">
-        <SectionTitle eyebrow="Kindly Respond" title="RSVP">
+    <section id="rsvp" className="scene paper paper--alt rsvp">
+      <div className="paper-card">
+        <SectionTitle eyebrow="RSVP" title="Kindly Respond">
           {rsvp.deadline ? `Please let us know by ${formatDate(rsvp.deadline, { weekday: undefined })}` : 'Please let us know if you can join us'}
         </SectionTitle>
 
         {status.kind === 'done' ? (
-          <Reveal className="rsvp-thanks" threshold={0}>
+          <Reveal className="rsvp-thanks">
             <p className="gold-text-dark rsvp-thanks-title">Thank you!</p>
             <p>
               {status.attending === 'no'

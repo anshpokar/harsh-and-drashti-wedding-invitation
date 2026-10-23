@@ -18,9 +18,10 @@ export interface Photo {
   caption?: string;
 }
 
-export interface Person {
-  name: string;
-  relation?: string;
+/** One line of the "With Blessings From" card, e.g. { relation: 'Grandparents', names: 'Smt. … & Shri …' }. */
+export interface BlessingGroup {
+  relation: string;
+  names: string;
 }
 
 export interface FamilySide {
@@ -29,8 +30,8 @@ export interface FamilySide {
   familyName: string | null;
   city: string | null;
   parents: string | null;
-  grandparents: string | null;
-  members: Person[];
+  /** Grandparents, siblings, nieces & nephews… in display order. */
+  blessings: BlessingGroup[];
   message: string | null;
   photo: Photo | null;
 }
@@ -42,6 +43,8 @@ export interface WeddingEvent {
   startTime: string | null;
   endTime: string | null;
   venueName: string | null;
+  /** City the function takes place in (used for maps search and the journey). */
+  city: string | null;
   address: string | null;
   mapsUrl: string | null;
   dressCode: string | null;
@@ -133,18 +136,18 @@ export const wedding: WeddingConfig = {
 
   couple: {
     groomName: 'Harsh',
-    brideName: 'Drasti', // NOTE: brief also spells it "Drashti" — confirm spelling.
-    groomFullName: null,
-    brideFullName: null,
+    brideName: 'Drashti',
+    groomFullName: 'Harsh Patel',
+    brideFullName: 'Drashti Pokar',
     message:
       'Two hearts, two families and two cities — brought together by love, blessed by our elders, and ready to begin forever.',
-    portrait: null, // { src: '/media/couple-portrait.jpg', alt: 'Harsh and Drasti' }
+    portrait: null, // { src: '/media/couple-portrait.jpg', alt: 'Harsh and Drashti' }
   },
 
   origin: { city: 'Badlapur', state: 'Maharashtra' },
   destination: { city: 'Ahmedabad', state: 'Gujarat' },
 
-  weddingDate: null, // e.g. '2027-02-14'
+  weddingDate: '2026-11-21',
   muhurat: null, // e.g. 'Shubh Muhurat · 7:42 PM'
   dateMessage: 'The day our forever begins.',
 
@@ -166,22 +169,20 @@ export const wedding: WeddingConfig = {
     {
       side: 'groom',
       heading: "The Groom's Family",
-      familyName: null,
+      familyName: 'Ramesh Patel',
       city: null,
       parents: null,
-      grandparents: null,
-      members: [],
+      blessings: [],
       message: null,
       photo: null,
     },
     {
       side: 'bride',
       heading: "The Bride's Family",
-      familyName: null,
+      familyName: 'Kantilal Pokar',
       city: null,
       parents: null,
-      grandparents: null,
-      members: [],
+      blessings: [],
       message: null,
       photo: null,
     },
@@ -191,14 +192,71 @@ export const wedding: WeddingConfig = {
    * Add ONLY confirmed functions. Example:
    * {
    *   id: 'haldi', name: 'Haldi', date: '2027-02-13', startTime: '10:00', endTime: '13:00',
-   *   venueName: '...', address: '...', mapsUrl: 'https://maps.app.goo.gl/...',
+   *   venueName: '...', city: '...', address: '...', mapsUrl: 'https://maps.app.goo.gl/...',
    *   dressCode: 'Shades of yellow', description: '...', image: null,
    * }
    */
-  events: [],
+  events: [
+    {
+      id: 'mandva-mameru',
+      name: 'Mandva & Mameru',
+      date: null,
+      startTime: null,
+      endTime: null,
+      venueName: null,
+      city: null,
+      address: null,
+      mapsUrl: null,
+      dressCode: null,
+      description: null,
+      image: null,
+    },
+    {
+      id: 'sangeet-dandiya',
+      name: 'Sangeet & Dandiya Night',
+      date: null,
+      startTime: null,
+      endTime: null,
+      venueName: null,
+      city: null,
+      address: null,
+      mapsUrl: null,
+      dressCode: null,
+      description: null,
+      image: null,
+    },
+    {
+      id: 'wedding',
+      name: 'Wedding Ceremony',
+      date: '2026-11-21',
+      startTime: null,
+      endTime: null,
+      venueName: 'Tirthdham',
+      city: 'Ahmedabad',
+      address: null,
+      mapsUrl: null, // paste the exact Google Maps pin link here
+      dressCode: null,
+      description: null,
+      image: null,
+    },
+    {
+      id: 'reception',
+      name: 'Reception',
+      date: null,
+      startTime: null,
+      endTime: null,
+      venueName: null,
+      city: 'Badlapur',
+      address: null,
+      mapsUrl: null,
+      dressCode: null,
+      description: null,
+      image: null,
+    },
+  ],
 
   venue: {
-    name: null,
+    name: 'Tirthdham',
     address: null,
     mapsUrl: null,
     image: null,
@@ -232,7 +290,7 @@ export const wedding: WeddingConfig = {
 
   closing: {
     invitation:
-      'With the blessings of our elders and the love of our families, we invite you to celebrate the wedding of Harsh and Drasti.',
+      'With the blessings of our elders and the love of our families, we invite you to celebrate the wedding of Harsh and Drashti.',
     blessing: 'Your presence and blessings will make our celebration even more special.',
     tagline: 'Together Begins Forever',
   },
@@ -251,6 +309,7 @@ export const sampleEvents: WeddingEvent[] = ['Function One', 'Function Two', 'We
     startTime: null,
     endTime: null,
     venueName: null,
+    city: null,
     address: null,
     mapsUrl: null,
     dressCode: null,

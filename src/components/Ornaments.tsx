@@ -1,7 +1,7 @@
-import type { CSSProperties, ReactNode } from 'react';
+import { useRef, type CSSProperties, type ReactNode } from 'react';
 import type { Photo } from '../config/wedding';
 import { showPlaceholders } from '../lib/content';
-import { Reveal } from './Reveal';
+import { gsap, onEnter, reducedMotion, useGSAP } from '../lib/gsap';
 
 export function Divider({ className = '' }: { className?: string }) {
   return (
@@ -74,14 +74,38 @@ export function Toran({ swags = 5, className = '' }: { swags?: number; className
   );
 }
 
+/**
+ * Section heading in the reference style: small spaced eyebrow, a large
+ * script title that "writes" itself in left-to-right, and a divider that
+ * draws outward from the centre.
+ */
 export function SectionTitle({ eyebrow, title, children }: { eyebrow?: string; title: string; children?: ReactNode }) {
+  const ref = useRef<HTMLElement>(null);
+  useGSAP(
+    () => {
+      if (reducedMotion()) return;
+      const q = gsap.utils.selector(ref);
+      gsap
+        .timeline({ scrollTrigger: onEnter(ref.current, 'top 85%') })
+        .from(q('.eyebrow'), { autoAlpha: 0, y: 12, letterSpacing: '0.6em', duration: 1 })
+        .fromTo(
+          q('h2'),
+          { clipPath: 'inset(-20% 100% -20% 0%)' },
+          { clipPath: 'inset(-20% 0% -20% 0%)', duration: 1.6, ease: 'power2.inOut' },
+          0.15,
+        )
+        .from(q('.divider'), { scaleX: 0, autoAlpha: 0, duration: 1.2, ease: 'expo.out' }, 0.8)
+        .from(q('.section-lead'), { autoAlpha: 0, y: 10, duration: 0.9 }, 1);
+    },
+    { scope: ref },
+  );
   return (
-    <Reveal as="header" className="section-title">
+    <header ref={ref} className="section-title">
       {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-      <h2 className="gold-text">{title}</h2>
+      <h2 className="script-title">{title}</h2>
       <Divider />
       {children && <p className="section-lead">{children}</p>}
-    </Reveal>
+    </header>
   );
 }
 

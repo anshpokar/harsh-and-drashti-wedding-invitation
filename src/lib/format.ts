@@ -35,35 +35,42 @@ export function formatTime(hhmm: string): string {
 
 export function timeRange(start: string | null, end: string | null): string | null {
   if (!start) return null;
-  return end ? `${formatTime(start)} – ${formatTime(end)}` : formatTime(start);
+  return end ? `${formatTime(start)} – ${formatTime(end)}` : `${formatTime(start)} onwards`;
 }
 
 export function mapsSearchUrl(query: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
 
-/** Builds an .ics calendar file for a single event (India time). */
+/** Builds an .ics calendar file for a single event (India time; all-day when no start time). */
 export function buildIcs(e: {
   id: string;
   title: string;
   date: string;
-  start: string;
+  start: string | null;
   end: string | null;
   location: string | null;
   description: string | null;
 }): string {
-  const stamp = (date: string, time: string) => `${date.replace(/-/g, '')}T${time.replace(':', '')}00`;
+  const day = e.date.replace(/-/g, '');
+  const stamp = (time: string) => `${day}T${time.replace(':', '')}00`;
   const esc = (s: string) => s.replace(/([,;\\])/g, '\\$1').replace(/\n/g, '\\n');
-  const endTime = e.end ?? `${String(Math.min(23, Number(e.start.slice(0, 2)) + 2)).padStart(2, '0')}${e.start.slice(2)}`;
+  let when: string[];
+  if (e.start) {
+    const end = e.end ?? `${String(Math.min(23, Number(e.start.slice(0, 2)) + 2)).padStart(2, '0')}${e.start.slice(2)}`;
+    when = [`DTSTART;TZID=${IST}:${stamp(e.start)}`, `DTEND;TZID=${IST}:${stamp(end)}`];
+  } else {
+    const next = new Date(Date.UTC(+day.slice(0, 4), +day.slice(4, 6) - 1, +day.slice(6) + 1));
+    when = [`DTSTART;VALUE=DATE:${day}`, `DTEND;VALUE=DATE:${next.toISOString().slice(0, 10).replace(/-/g, '')}`];
+  }
   return [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Harsh Weds Drasti//Invitation//EN',
+    'PRODID:-//Harsh Weds Drashti//Invitation//EN',
     'BEGIN:VEVENT',
-    `UID:${e.id}@harsh-weds-drasti`,
+    `UID:${e.id}@harsh-weds-drashti`,
     `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').slice(0, 15)}Z`,
-    `DTSTART;TZID=${IST}:${stamp(e.date, e.start)}`,
-    `DTEND;TZID=${IST}:${stamp(e.date, endTime)}`,
+    ...when,
     `SUMMARY:${esc(e.title)}`,
     e.location ? `LOCATION:${esc(e.location)}` : '',
     e.description ? `DESCRIPTION:${esc(e.description)}` : '',

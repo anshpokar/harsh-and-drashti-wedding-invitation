@@ -1,8 +1,10 @@
-# Harsh Weds Drasti: Royal Wedding Invitation
+# Harsh Weds Drashti: Royal Wedding Invitation
 
 A mobile-first, cinematic wedding invitation. The guest opens the palace doors, a silk ribbon falls away, the names appear in gold, and then they scroll through a shloka, the couple, a scratch-to-reveal date, the Badlapur → Ahmedabad journey, families, events, venue, gallery, RSVP and the closing.
 
-Scene plan, timings, intro-video brief and reference-video workflow: **[docs/STORYBOARD.md](docs/STORYBOARD.md)**
+Built with React, TypeScript, Vite and **GSAP** (ScrollTrigger and MotionPath).
+
+Scene plan, GSAP motion per scene, timings, intro-video brief and reference-video workflow: **[docs/STORYBOARD.md](docs/STORYBOARD.md)**
 
 ## Run it
 
@@ -27,7 +29,7 @@ Production: `ADMIN_TOKEN=some-long-secret npm start`. This builds the site and s
 
 ### Still needed from the family
 
-Wedding date and muhurat · full names of the couple · both families' names, parents and grandparents (optional) · confirmed functions with date, time, venue, address, Maps link and dress code · venue name, address and Maps link · travel and accommodation notes · contact numbers · couple, family and gallery photos · optional Ganesh artwork, music and intro video · RSVP deadline · confirmation of the bride's name spelling (*Drasti* or *Drashti*).
+Muhurat · parents' names and the blessings list (grandparents, siblings, nieces and nephews) for both families · dates, times and venues for Mandva & Mameru, Sangeet & Dandiya Night and the Reception · Tirthdham's full address and exact Google Maps pin link · travel and accommodation notes · contact numbers · couple, family and gallery photos · optional Ganesh artwork, music and intro video · RSVP deadline.
 
 ## RSVP
 

@@ -72,11 +72,10 @@ function DoorLeaf({ side }: { side: 'left' | 'right' }) {
   );
 }
 
-export type DoorState = 'closed' | 'opening' | 'open';
-
-export function PalaceDoors({ state, children }: { state: DoorState; children?: React.ReactNode }) {
+/** Carved palace doorway. Opening is animated by RoyalIntro's GSAP timeline. */
+export function PalaceDoors() {
   return (
-    <div className={`palace palace--${state}`}>
+    <div className="palace">
       {/* Carved archway frame */}
       <svg className="palace-frame" viewBox="0 0 100 160" preserveAspectRatio="none" aria-hidden="true">
         <path
@@ -105,7 +104,6 @@ export function PalaceDoors({ state, children }: { state: DoorState; children?: 
           <DoorLeaf side="right" />
         </div>
       </div>
-      {children}
     </div>
   );
 }

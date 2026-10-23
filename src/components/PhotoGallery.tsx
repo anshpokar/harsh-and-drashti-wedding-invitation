@@ -69,7 +69,7 @@ export function PhotoGallery() {
   if (!gallery.length && !showPlaceholders) return null;
 
   return (
-    <section id="gallery" className="scene royal gallery">
+    <section id="gallery" className="scene paper gallery">
       <SectionTitle eyebrow="Moments" title="Our Story in Frames" />
       <div className="gallery-grid">
         {gallery.length

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ClosingInvitation } from './components/ClosingInvitation';
 import { CoupleIntroduction } from './components/CoupleIntroduction';
 import { FamilyIntroduction } from './components/FamilyIntroduction';
@@ -12,6 +12,7 @@ import { ScratchDateCard } from './components/ScratchDateCard';
 import { ShlokaSection } from './components/ShlokaSection';
 import { VenueDetails } from './components/VenueDetails';
 import { WeddingTimeline } from './components/WeddingTimeline';
+import { ScrollTrigger } from './lib/gsap';
 
 export default function App() {
   // Deep links (e.g. …/#venue shared on WhatsApp) skip the intro.
@@ -22,13 +23,22 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
+  // Trigger positions are measured while the page sits hidden behind the intro;
+  // re-measure once it lifts, and again when web fonts change line heights.
+  useEffect(() => {
+    if (introOpen) return;
+    const id = requestAnimationFrame(() => ScrollTrigger.refresh());
+    document.fonts?.ready.then(() => ScrollTrigger.refresh());
+    return () => cancelAnimationFrame(id);
+  }, [introOpen]);
+
   return (
     <>
       {introOpen && <RoyalIntro onDone={closeIntro} />}
       <main className={introOpen ? 'main--behind-intro' : 'main--entered'} aria-hidden={introOpen}>
         <PreviewBanner />
         {/* Scene order — see docs/STORYBOARD.md */}
-        <HeroNames />
+        <HeroNames entered={!introOpen} />
         <ShlokaSection />
         <CoupleIntroduction />
         <ScratchDateCard />

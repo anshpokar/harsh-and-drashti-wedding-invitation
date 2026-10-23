@@ -1,30 +1,33 @@
-# Harsh Weds Drasti: Storyboard and Scene Plan
+# Harsh Weds Drashti: Storyboard and Scene Plan
 
 This is the scene order the site uses (`src/App.tsx`), with what each scene does, how it's built, and how long it runs.
 The reference video hasn't been analysed yet. See **§3** for the steps to follow once it arrives.
 
 ## 1. Scene order
 
-| # | Scene | Component | Built with | Duration / trigger | Guest action |
-|---|-------|-----------|------------|--------------------|--------------|
-| 1 | **Royal entrance**: dark palace, carved doors, marigold toran, lanterns, gold dust, red silk ribbon with bow. "A Royal Celebration of Love". | `RoyalIntro`, `PalaceDoors`, `RibbonReveal`, `GoldDust`, `Toran` | SVG + CSS, canvas particles | Waits for a tap | Taps "Tap to Open the Invitation" (or Skip intro) |
-| 2a | **Ribbon release**: the bow loosens and both ribbon halves fall away | `RibbonReveal` | SVG layer, CSS transitions | 0 – 1.3 s after tap | |
-| 2b | **Doors open** with 3D perspective, and warm light floods out | `PalaceDoors` | CSS 3D `rotateY` | 0.9 – 3.1 s | |
-| 2c | **Name reveal**: the camera pushes through the doorway, and HARSH *weds* DRASTI forms letter by letter in metallic gold | `CoupleNameReveal` | CSS keyframes | 2.5 – 5 s | "Enter the Celebration" (auto-enters at 9.5 s) |
-| 3 | **Hero**: the names under a palace arch, Badlapur ✦ Ahmedabad | `HeroNames` | CSS | On scroll | Scrolls |
-| 4 | **Sacred welcome**: lotus (or Ganesh artwork), ॥ श्री गणेशाय नमः ॥, shloka written in line by line, transliteration, meaning | `ShlokaSection` | Clip-path "ink" wipe | About 3 s once in view | |
-| 5 | **Couple introduction**: "Together with the blessings of our families", arched portrait, full names, message | `CoupleIntroduction` | Scroll reveals | | |
-| 6 | **Scratch to reveal the date**: gold-foil card, auto-reveals at 50% scratched, sparkle burst | `ScratchDateCard` | Canvas `destination-out` | Interactive | Scratches, or taps "Tap to reveal instead" |
-| 7 | **Royal journey**: stylised western-India map, gold route Badlapur → Surat → Vadodara → Ahmedabad drawn with a glowing traveller | `JourneyMap` | SVG (real lon/lat projection) | 3.2 s once in view | "Directions to the Venue" (once venue is set) |
-| 8 | **Two families**: groom's and bride's cards | `FamilyIntroduction` | Scroll reveals | | |
-| 9 | **Festivities**: numbered timeline of royal scrolls that unroll | `WeddingTimeline` | Clip-path unroll | | Open in Maps / Add to Calendar (.ics) |
-| 10 | **Venue and travel**: venue card, travel notes, stay, contacts (Call / WhatsApp) | `VenueDetails` | | | Open in Maps / View All Events / Contact |
-| 11 | **Gallery**: editorial grid and full-screen viewer (swipe, arrows, Esc) | `PhotoGallery` | | | Taps a photo |
-| 12 | **RSVP**: saved on the server | `RSVPForm` + `server.mjs` | | | Submits |
-| 13 | **Closing**: invitation text, "Harsh weds Drasti / Together Begins Forever", lotus, replay | `ClosingInvitation` | | | "Replay the Royal Entrance" |
+**Look:** the opening (palace doors) and hero are dark royal burgundy and gold. From the shloka onward, the pages switch to the blush-ivory style of the reference designs: Pinyon Script headings, gold letter-spaced capitals, white cards. The site closes on a maroon airmail "Thank You" letter.
+**Motion:** all animation is GSAP (`src/lib/gsap.ts`). The opening is one master timeline. Every later scene is driven by ScrollTrigger, and everything is skipped under `prefers-reduced-motion`.
 
-There's always a floating bar with **Date · Events · Venue · RSVP**, plus a music toggle when music is configured.
-Shared links like `…/#venue` skip the intro.
+| # | Scene | Component | GSAP motion | Guest action |
+|---|-------|-----------|-------------|--------------|
+| 1 | **Royal entrance**: carved doors, toran, lanterns, gold dust, silk ribbon with bow | `RoyalIntro`, `PalaceDoors`, `RibbonReveal` | Palace emerges, garland drops, lanterns bounce in then sway, ribbon stretches across, bow springs in and breathes | Taps (or Skip intro) |
+| 2a | **Ribbon release** | `RibbonReveal` | Bow loops collapse, bow drops and spins away, ribbon halves fall outward (0–1.3 s) | |
+| 2b | **Doors open** | `PalaceDoors` | `rotationY` ±108° with perspective, light floods (0.9–3.3 s) | |
+| 2c | **Name reveal** | `CoupleNameReveal` | Camera pushes through the doorway; letters condense out of blur; "weds" blooms (from 2.4 s) | "Enter the Celebration" (auto-enters about 4.5 s later) |
+| 3 | **Hero**: names under an arch, Badlapur ✦ Ahmedabad, 21 · November · 2026 | `HeroNames` | Arch rises and names replay; scrubbed parallax as it scrolls away | |
+| 4 | **Sacred welcome**: lotus, ॥ श्री गणेशाय नमः ॥, shloka | `ShlokaSection` | Lotus spins in; each Devanagari line is inked left to right | |
+| 5 | **Couple**: Harsh & Drashti, Harsh Patel · Drashti Pokar | `CoupleIntroduction` | Portrait lifts out of the arch; scrubbed photo parallax | |
+| 6 | **Save the Date** scratch card | `ScratchDateCard` | Foil dissolves, "21" pops elastically, spark burst, card wobble, "N days to go" counts up | Scratches / taps |
+| 7 | **Royal journey** map | `JourneyMap` | Coast draws, route draws while a traveller rides it (MotionPath), Ahmedabad pin pops, dashed **Reception** route draws back to Badlapur | Directions |
+| 8 | **With Blessings From**: Ramesh Patel / Kantilal Pokar | `FamilyIntroduction` | Cards slide in from both sides; relation groups stagger | |
+| 9 | **Wedding Events**: Mandva & Mameru · Sangeet & Dandiya Night · Wedding Ceremony (21 Nov, Tirthdham) · Reception (Badlapur) | `WeddingTimeline`, `EventArt` | Card rises, script name pops, illustration unveils, marigold strands drop; idle flame flicker, dandiya clash, chandelier sway; Ken Burns on scroll | View on Maps / Add to Calendar |
+| 10 | **Venue**: Tirthdham, Ahmedabad, skyline, reception venue | `VenueDetails`, `CitySkyline` | Venue name letter-spacing settles; skyline buildings rise out of the Sabarmati, reflection fades in, kite floats, ripples drift | View on Maps |
+| 11 | **Gallery** | `PhotoGallery` | Staggered reveals | Opens viewer |
+| 12 | **Kindly Respond** RSVP | `RSVPForm` | Heading writes itself in | Submits |
+| 13 | **Thank You** airmail letter | `ClosingInvitation` | Letter flies up, script writes in, postmark stamps, wax seal presses down, marigold petals fall while on screen | Replay |
+
+Each section heading (`SectionTitle`) writes itself in with a clip-path wipe while its divider draws outward.
+There's always a bottom bar with **Date · Events · Venue · RSVP**. If music is configured, a spinning vinyl button appears too. Shared links like `…/#venue` skip the intro.
 
 ## 2. Separate cinematic entry video (optional)
 

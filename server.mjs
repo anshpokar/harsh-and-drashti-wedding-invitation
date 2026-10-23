@@ -173,5 +173,5 @@ const server = createServer(async (req, res) => {
 });
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  server.listen(PORT, () => console.log(`Harsh Weds Drasti → http://localhost:${PORT}`));
+  server.listen(PORT, () => console.log(`Harsh Weds Drashti → http://localhost:${PORT}`));
 }

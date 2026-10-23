@@ -1,11 +1,11 @@
 /**
  * Red silk ribbon with a bow, drawn across the doors as its own SVG layer
  * so it stays interactive and is never baked into the video.
- * `released` unties the bow and lets both halves fall away.
+ * RoyalIntro's GSAP timeline unties the bow and drops both halves.
  */
-export function RibbonReveal({ released }: { released: boolean }) {
+export function RibbonReveal() {
   return (
-    <div className={`ribbon ${released ? 'ribbon--released' : ''}`} aria-hidden="true">
+    <div className="ribbon" aria-hidden="true">
       <svg viewBox="0 0 400 80" preserveAspectRatio="none" className="ribbon-band ribbon-band--left">
         <defs>
           <linearGradient id="silk" x1="0" y1="0" x2="0" y2="1">
