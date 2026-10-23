@@ -6,15 +6,30 @@ Built with React, TypeScript, Vite and **GSAP** (ScrollTrigger and MotionPath).
 
 Scene plan, GSAP motion per scene, timings, intro-video brief and reference-video workflow: **[docs/STORYBOARD.md](docs/STORYBOARD.md)**
 
-## Run it
+## Preview it on your computer
+
+You need **Git** (https://git-scm.com) and **Node.js 18 or newer** (https://nodejs.org, the LTS version).
 
 ```bash
+git clone https://github.com/anshpokar/harsh-and-drashti-wedding-invitation.git
+cd harsh-and-drashti-wedding-invitation
 npm install
-npm run server      # RSVP API on :8787 (terminal 1)
-npm run dev         # site with hot reload on :5173 (terminal 2)
+npm start
 ```
 
-Production: `ADMIN_TOKEN=some-long-secret npm start`. This builds the site and serves it together with the RSVP API on `PORT` (default 8787).
+Open **http://localhost:8787**. RSVPs you submit are saved to `data/rsvps.jsonl`.
+Stop it with `Ctrl + C`.
+
+**While editing `src/data.ts`**, use live reload instead. Open two terminals in the project folder:
+
+```bash
+npm run server   # terminal 1: RSVP saving
+npm run dev      # terminal 2: open http://localhost:5173; it refreshes on every save
+```
+
+**On your phone:** connect it to the same Wi-Fi as the computer, then open the *Network* address `npm run dev` prints (like `http://192.168.1.5:5173`). With `npm start`, use `http://<your-computer's-IP>:8787` instead.
+
+**Get the latest changes later:** `git pull`, then `npm install` and `npm start` again.
 
 ## Edit the content
 
