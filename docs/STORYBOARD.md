@@ -27,7 +27,7 @@ The reference video hasn't been analysed yet. See **§3** for the steps to follo
 | 13 | **Thank You** airmail letter | `ClosingInvitation` | Letter flies up, script writes in, postmark stamps, wax seal presses down, marigold petals fall while on screen | Replay |
 
 Each section heading (`SectionTitle`) writes itself in with a clip-path wipe while its divider draws outward.
-There's always a bottom bar with **Date · Events · Venue · RSVP**. If music is configured, a spinning vinyl button appears too. Shared links like `…/#venue` skip the intro.
+No navigation bar: the invitation is one continuous scrolling card. If music is configured, a spinning vinyl button appears in the corner. Shared links like `…/#venue` skip the intro.
 
 ## 2. Separate cinematic entry video (optional)
 

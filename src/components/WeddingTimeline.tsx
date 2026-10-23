@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { sampleEvents, wedding, type WeddingEvent } from '../config/wedding';
 import { coupleTitle, eventMapsLink, showPlaceholders } from '../lib/content';
 import { buildIcs, dateParts, downloadFile, timeRange } from '../lib/format';
@@ -9,6 +9,8 @@ import { Pending, SectionTitle } from './Ornaments';
 const TBA = 'To be announced';
 
 function EventCard({ event, sample }: { event: WeddingEvent; sample: boolean }) {
+  // Fall back to the line-art motif if the illustration file is missing or fails to load.
+  const [imageFailed, setImageFailed] = useState(false);
   const parts = event.date ? dateParts(event.date) : null;
   const time = timeRange(event.startTime, event.endTime);
   const maps = eventMapsLink(event);
@@ -43,7 +45,11 @@ function EventCard({ event, sample }: { event: WeddingEvent; sample: boolean }) 
         <span>{time ?? (showPlaceholders ? <Pending label="Time" /> : 'Time to be announced')}</span>
       </p>
       <div className="event-visual">
-        {event.image ? <img src={event.image.src} alt={event.image.alt} loading="lazy" /> : <EventArt id={event.id} name={event.name} />}
+        {event.image && !imageFailed ? (
+          <img src={event.image.src} alt={event.image.alt} loading="lazy" decoding="async" onError={() => setImageFailed(true)} />
+        ) : (
+          <EventArt id={event.id} name={event.name} />
+        )}
       </div>
       <div className="event-venue">
         <p className="eyebrow">Venue</p>

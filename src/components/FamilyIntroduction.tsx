@@ -2,10 +2,10 @@ import { useRef } from 'react';
 import { wedding, type FamilySide } from '../config/wedding';
 import { showPlaceholders } from '../lib/content';
 import { gsap, onEnter, reducedMotion, useGSAP } from '../lib/gsap';
-import { Divider, Pending, PhotoFrame, SectionTitle } from './Ornaments';
+import { Divider, Pending, SectionTitle } from './Ornaments';
 
 function hasContent(f: FamilySide) {
-  return Boolean(f.familyName || f.father || f.mother || f.blessings.some((b) => !b.sample) || f.message || f.photo);
+  return Boolean(f.familyName || f.father || f.mother || f.blessings.some((b) => !b.sample) || f.message);
 }
 
 function FamilyCard({ family }: { family: FamilySide }) {
@@ -15,7 +15,6 @@ function FamilyCard({ family }: { family: FamilySide }) {
       <p className="eyebrow">{family.heading}</p>
       {family.familyName ? <h3 className="family-name">{family.familyName}</h3> : <Pending label="Family name" block />}
       {family.city && <p className="family-city">{family.city}</p>}
-      <PhotoFrame photo={family.photo} shape="rect" label="Family photograph" className="family-photo" />
       <Divider />
       <dl className="blessing-list">
         {family.father || family.mother ? (

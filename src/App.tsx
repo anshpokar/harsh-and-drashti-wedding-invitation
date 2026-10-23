@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ClosingInvitation } from './components/ClosingInvitation';
 import { CoupleIntroduction } from './components/CoupleIntroduction';
 import { FamilyIntroduction } from './components/FamilyIntroduction';
-import { FloatingNav, PreviewBanner } from './components/FloatingNav';
+import { MusicToggle, PreviewBanner } from './components/FloatingNav';
 import { HeroNames } from './components/HeroNames';
 import { JourneyMap } from './components/JourneyMap';
 import { PhotoGallery } from './components/PhotoGallery';
@@ -50,7 +50,7 @@ export default function App() {
         <RSVPForm />
         <ClosingInvitation onReplay={() => setIntroOpen(true)} />
       </main>
-      {!introOpen && <FloatingNav />}
+      {!introOpen && <MusicToggle />}
     </>
   );
 }

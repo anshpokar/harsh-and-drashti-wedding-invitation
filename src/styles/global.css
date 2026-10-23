@@ -1480,7 +1480,7 @@ button.photo-frame {
 
 /* ═════════ Closing: Thank You letter ═════════ */
 .closing {
-  padding-bottom: 130px;
+  padding-bottom: 80px;
   background:
     radial-gradient(ellipse at 50% 30%, rgba(201, 162, 74, 0.18), transparent 60%),
     linear-gradient(180deg, #7a1a2c, #4a0d1a);
@@ -1636,7 +1636,7 @@ button.photo-frame {
 .vinyl {
   position: fixed;
   right: 14px;
-  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 58px);
+  bottom: max(16px, env(safe-area-inset-bottom));
   z-index: 51;
   width: 52px;
   height: 52px;
@@ -1663,47 +1663,6 @@ button.photo-frame {
   to {
     transform: rotate(360deg);
   }
-}
-
-/* ═════════ Floating nav ═════════ */
-.floating-nav {
-  position: fixed;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  width: fit-content;
-  bottom: max(12px, env(safe-area-inset-bottom));
-  z-index: 50;
-  display: flex;
-  gap: 2px;
-  padding: 5px;
-  border-radius: 999px;
-  background: rgba(36, 9, 26, 0.82);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(201, 162, 74, 0.5);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-  animation: fade-up 0.8s var(--ease-out) 1s both;
-  max-width: calc(100vw - 24px);
-}
-.floating-nav a,
-.floating-nav button {
-  padding: 9px 12px;
-  border-radius: 999px;
-  border: 0;
-  background: none;
-  font-family: var(--font-heading);
-  font-size: 0.66rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gold-light);
-  text-decoration: none;
-  white-space: nowrap;
-  cursor: pointer;
-}
-.floating-nav a:hover,
-.floating-nav button[aria-pressed='true'] {
-  background: rgba(201, 162, 74, 0.2);
 }
 
 /* ═════════ Reduced motion ═════════ */

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { wedding } from '../config/wedding';
 
-/** Always-available shortcuts so guests never have to hunt for key details. */
-export function FloatingNav() {
+/** Music toggle (vinyl), shown only when a track is configured. */
+export function MusicToggle() {
   const [playing, setPlaying] = useState(false);
   const audio = useRef<HTMLAudioElement | null>(null);
   const { music } = wedding;
@@ -17,22 +17,8 @@ export function FloatingNav() {
     setPlaying(!playing);
   };
 
-  const links = [
-    ['#date', 'Date'],
-    ['#events', 'Events'],
-    ['#venue', 'Venue'],
-    ['#rsvp', 'RSVP'],
-  ];
-
   return (
     <>
-      <nav className="floating-nav" aria-label="Quick links">
-        {links.map(([href, label]) => (
-          <a key={href} href={href}>
-            {label}
-          </a>
-        ))}
-      </nav>
       {music.src && (
         <button className={`vinyl ${playing ? 'is-playing' : ''}`} onClick={toggle} aria-pressed={playing} aria-label={playing ? 'Pause music' : 'Play music'}>
           <span className="vinyl-label" />

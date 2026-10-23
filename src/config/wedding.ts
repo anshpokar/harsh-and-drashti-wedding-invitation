@@ -231,7 +231,7 @@ export const wedding: WeddingConfig = {
       mapsUrl: VENUE_MAPS_URL,
       dressCode: null,
       description: null,
-      image: null,
+      image: { src: '/media/events/mandva.webp', alt: 'Illustration of the bride and groom the Mandva ceremony' },
     },
     {
       id: 'mameru',
@@ -245,7 +245,7 @@ export const wedding: WeddingConfig = {
       mapsUrl: VENUE_MAPS_URL,
       dressCode: null,
       description: null,
-      image: null,
+      image: { src: '/media/events/mameru.webp', alt: 'Illustration of the bride and groom the Mameru ceremony' },
     },
     {
       id: 'sangeet-dandiya',
@@ -259,7 +259,7 @@ export const wedding: WeddingConfig = {
       mapsUrl: VENUE_MAPS_URL,
       dressCode: null,
       description: null,
-      image: null,
+      image: { src: '/media/events/sangeet-dandiya.webp', alt: 'Illustration of the bride and groom playing dandiya at the Sangeet night' },
     },
     {
       id: 'wedding',
@@ -273,7 +273,7 @@ export const wedding: WeddingConfig = {
       mapsUrl: VENUE_MAPS_URL,
       dressCode: null,
       description: null,
-      image: null,
+      image: { src: '/media/events/wedding.webp', alt: 'Illustration of the bride and groom taking pheras around the sacred fire' },
     },
     {
       id: 'reception',
@@ -287,7 +287,7 @@ export const wedding: WeddingConfig = {
       mapsUrl: null,
       dressCode: null,
       description: null,
-      image: null,
+      image: { src: '/media/events/reception.webp', alt: 'Illustration of the bride and groom at the evening reception' },
     },
   ],
 
