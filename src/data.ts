@@ -61,7 +61,7 @@ export const wedding: WeddingConfig = {
       father: 'Ramesh Mavani',
       mother: 'Harsha Mavani',
       blessings: [
-        { relation: 'Sister', names: 'Princy' },
+        { relation: 'Sister', names: 'Pari Mavani' },
       ],
       message: null,
       photo: null,
