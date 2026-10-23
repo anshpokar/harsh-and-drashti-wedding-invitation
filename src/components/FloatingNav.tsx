@@ -1,29 +1,56 @@
 import { useEffect, useRef, useState } from 'react';
 import { wedding } from '../config/wedding';
 
-/** Music toggle (vinyl), shown only when a track is configured. */
+/** Clean circular music toggle button without text badges or indicators. */
 export function MusicToggle() {
   const [playing, setPlaying] = useState(false);
   const audio = useRef<HTMLAudioElement | null>(null);
   const { music } = wedding;
 
-  useEffect(() => () => audio.current?.pause(), []);
+  useEffect(() => {
+    if (!music.src) return;
+    const a = Object.assign(new Audio(music.src), { loop: true, volume: 0.55 });
+    audio.current = a;
+
+    // Autoplay attempt once guest has entered celebration
+    const playPromise = a.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => setPlaying(true))
+        .catch(() => {
+          setPlaying(false);
+        });
+    }
+
+    return () => {
+      a.pause();
+    };
+  }, [music.src]);
 
   const toggle = () => {
-    if (!music.src) return;
-    audio.current ??= Object.assign(new Audio(music.src), { loop: true, volume: 0.6 });
-    if (playing) audio.current.pause();
-    else audio.current.play().catch(() => setPlaying(false));
-    setPlaying(!playing);
+    if (!audio.current) return;
+    if (playing) {
+      audio.current.pause();
+      setPlaying(false);
+    } else {
+      audio.current
+        .play()
+        .then(() => setPlaying(true))
+        .catch(() => setPlaying(false));
+    }
   };
 
+  if (!music.src) return null;
+
   return (
-    <>
-      {music.src && (
-        <button className={`vinyl ${playing ? 'is-playing' : ''}`} onClick={toggle} aria-pressed={playing} aria-label={playing ? 'Pause music' : 'Play music'}>
-          <span className="vinyl-label" />
-        </button>
-      )}
-    </>
+    <button
+      className={`royal-music-btn ${playing ? 'is-playing' : ''}`}
+      onClick={toggle}
+      aria-pressed={playing}
+      aria-label={playing ? 'Pause music' : 'Play music'}
+      title={playing ? 'Pause music' : 'Play music'}
+    >
+      <span className="music-icon" aria-hidden="true">{playing ? '♫' : '♪'}</span>
+    </button>
   );
 }

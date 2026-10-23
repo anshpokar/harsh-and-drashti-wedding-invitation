@@ -299,30 +299,51 @@ button.photo-frame {
   aspect-ratio: 4 / 3;
 }
 
-/* ═════════ Scene 1–2: Royal intro ═════════ */
+/* ═════════ Falling Rose Petals ═════════ */
+.falling-petals {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ═════════ Scene 1–2: Royal Intro ═════════ */
 .intro {
   position: fixed;
   inset: 0;
   z-index: 100;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse at 50% 55%, #4a1020 0%, #2a0812 45%, #12030a 100%);
+  background: #150308;
 }
 .intro--leaving {
+  pointer-events: none;
+}
+.intro-palace-backdrop {
+  position: absolute;
+  inset: -5%;
+  width: 110%;
+  height: 110%;
+  background-image: url('/media/royal-palace-entrance.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(12px) brightness(0.24) saturate(1.2);
+  transform: scale(1.04);
   pointer-events: none;
 }
 .intro-bloom {
   position: absolute;
   inset: 0;
-  z-index: 3;
-  background: radial-gradient(ellipse at 50% 50%, rgba(255, 210, 120, 0.22), rgba(36, 9, 26, 0.55) 55%, transparent 80%);
+  z-index: 4;
+  background: radial-gradient(ellipse at 50% 50%, rgba(255, 220, 130, 0.35), rgba(90, 15, 30, 0.5) 55%, transparent 85%);
   pointer-events: none;
 }
 .intro-vignette {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.7));
-  z-index: 3;
+  background: radial-gradient(ellipse at center, rgba(15, 3, 7, 0.3) 30%, rgba(8, 2, 4, 0.85) 100%);
+  z-index: 4;
   pointer-events: none;
 }
 .intro-video {
@@ -333,62 +354,65 @@ button.photo-frame {
   object-fit: cover;
 }
 .intro-dust {
-  z-index: 4;
+  z-index: 5;
+}
+.intro-petals {
+  z-index: 6;
 }
 .intro-toran {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 54px;
-  z-index: 5;
+  height: 56px;
+  z-index: 7;
 }
 .lantern {
   position: absolute;
   top: 0;
-  width: 22px;
-  height: 120px;
-  z-index: 4;
+  width: 24px;
+  height: 130px;
+  z-index: 6;
 }
 .lantern::before {
   content: '';
   position: absolute;
   left: 50%;
   top: 0;
-  width: 1px;
-  height: 72px;
-  background: var(--gold);
+  width: 1.5px;
+  height: 76px;
+  background: linear-gradient(180deg, var(--gold-pale), var(--gold));
 }
 .lantern::after {
   content: '';
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 22px;
-  height: 34px;
+  width: 24px;
+  height: 38px;
   border-radius: 40% 40% 50% 50%;
-  background: radial-gradient(circle at 50% 40%, #fff1b8, #f0a830 55%, #8a4a10);
-  box-shadow: 0 0 30px 10px rgba(255, 180, 60, 0.45);
+  background: radial-gradient(circle at 50% 38%, #fff4c6, #f3a928 50%, #7c3b06);
+  box-shadow: 0 0 35px 12px rgba(255, 185, 60, 0.5);
   animation: flicker 3.2s ease-in-out infinite;
 }
 .lantern--left {
-  left: 7%;
+  left: 8%;
 }
 .lantern--right {
-  right: 7%;
+  right: 8%;
 }
 .lantern--right::after {
-  animation-delay: -1.4s;
+  animation-delay: -1.6s;
 }
 @keyframes flicker {
-  0%, 100% { opacity: 1; box-shadow: 0 0 30px 10px rgba(255, 180, 60, 0.45); }
-  45% { opacity: 0.85; box-shadow: 0 0 22px 6px rgba(255, 180, 60, 0.3); }
+  0%, 100% { opacity: 1; box-shadow: 0 0 35px 12px rgba(255, 185, 60, 0.5); }
+  50% { opacity: 0.82; box-shadow: 0 0 24px 8px rgba(255, 185, 60, 0.32); }
 }
 
 .intro-stage {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 3;
   display: grid;
   place-items: center;
   border: 0;
@@ -396,202 +420,438 @@ button.photo-frame {
   background: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  perspective: 1400px;
 }
 .intro-stage:disabled {
   cursor: default;
 }
 
-/* The palace doorway */
+/* ═════════ The Royal Palace Doorway ═════════ */
 .palace {
   position: relative;
-  width: min(80vw, 46vh, 460px);
-  aspect-ratio: 5 / 8;
-  margin-top: 4vh;
+  width: min(84vw, 50vh, 480px);
+  aspect-ratio: 5 / 7.8;
+  margin-top: 3vh;
+  perspective: 1400px;
 }
 .palace-video-spacer {
   visibility: hidden;
 }
-.palace-frame {
+.palace-arch-frame {
   position: absolute;
-  inset: -6% -9% -2%;
-  width: 118%;
-  height: 108%;
-  overflow: visible;
-  filter: drop-shadow(0 0 10px rgba(241, 213, 138, 0.35));
+  inset: -6% -8% -3%;
+  width: 116%;
+  height: 109%;
+  pointer-events: none;
+  z-index: 5;
 }
+.palace-arch-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.7));
+}
+.arch-crest {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 54px;
+  height: 36px;
+}
+.arch-crest-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 8px rgba(201, 162, 74, 0.6));
+}
+
 .doorway {
   position: absolute;
   inset: 0;
   border-radius: 50% 50% 0 0 / 22% 22% 0 0;
   overflow: hidden;
-  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.85),
+    inset 0 0 50px rgba(0, 0, 0, 0.85);
+  background: #1a040b;
 }
+
+/* Durbar hall visible behind the doors */
+.doorway-durbar {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+.doorway-durbar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  transform: scale(1.02);
+}
+.doorway-durbar-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, rgba(255, 220, 130, 0.2), rgba(40, 8, 16, 0.5) 75%);
+  pointer-events: none;
+}
+
 .doorway-light {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 55%, #fff8dc 0%, #ffd77a 30%, #c9862a 65%, #5a2a0a 100%);
+  z-index: 2;
+  background: radial-gradient(ellipse at 50% 50%, #fffbf0 0%, #ffe082 30%, #c9862a 65%, transparent 100%);
+  mix-blend-mode: screen;
+  pointer-events: none;
 }
+
+/* 3D Door leaves */
 .door {
   position: absolute;
   top: 0;
   bottom: 0;
   width: 50%;
+  z-index: 3;
   will-change: transform;
   backface-visibility: hidden;
+  transform-style: preserve-3d;
 }
 .door--left {
   left: 0;
-  transform-origin: left center;
-  box-shadow: inset -6px 0 12px rgba(0, 0, 0, 0.45);
+  transform-origin: 0% 50%;
+  box-shadow: inset -8px 0 16px rgba(0, 0, 0, 0.6);
 }
 .door--right {
   right: 0;
-  transform-origin: right center;
-  box-shadow: inset 6px 0 12px rgba(0, 0, 0, 0.45);
+  transform-origin: 100% 50%;
+  box-shadow: inset 8px 0 16px rgba(0, 0, 0, 0.6);
 }
-.door-art {
+
+.door-leaf {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #2b0b13;
+}
+.door-leaf-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+.door-leaf-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(40, 8, 16, 0.15) 0%, transparent 40%, rgba(0, 0, 0, 0.45) 100%);
+  pointer-events: none;
+}
+.door-leaf-edge-bevel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #f7e199, #c59835 50%, #684814);
+  opacity: 0.7;
+}
+.door--left .door-leaf-edge-bevel {
+  right: 0;
+}
+.door--right .door-leaf-edge-bevel {
+  left: 0;
+}
+
+.doorway-seam {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  margin-left: -1.5px;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* ═════════ Royal Silk Ribbon & Gold Seal ═════════ */
+.ribbon {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 2vh + min(84vw, 50vh, 480px) * 0.08);
+  width: min(100vw, 76vh, 740px);
+  height: 80px;
+  pointer-events: none;
+  z-index: 6;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.75));
+}
+.seal-flare {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0%, #fff0a8 30%, #e5b338 60%, transparent 75%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 8;
+}
+
+.ribbon-band {
+  position: absolute;
+  top: 14px;
+  width: 50%;
+  height: 52px;
+}
+.ribbon-band--left {
+  left: 0;
+  transform-origin: 0% 50%;
+}
+.ribbon-band--right {
+  right: 0;
+  transform-origin: 100% 50%;
+}
+
+.ribbon-fabric {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #db1c3a 0%, #9a0e23 40%, #ba1830 70%, #630715 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+.ribbon-gold-trim {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #8d621b 0%, #ffe699 20%, #d8ab43 50%, #ffe699 80%, #8d621b 100%);
+}
+.ribbon-gold-trim--top {
+  top: 0;
+}
+.ribbon-gold-trim--bottom {
+  bottom: 0;
+}
+.ribbon-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.3) 50%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Central Medallion & Bow */
+.ribbon-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  display: grid;
+  place-items: center;
+}
+.bow-loop {
+  position: absolute;
+  top: 36px;
+  width: 56px;
+  height: 40px;
+  z-index: 6;
+}
+.bow-loop--left {
+  right: 50%;
+  transform-origin: 100% 50%;
+}
+.bow-loop--right {
+  left: 50%;
+  transform-origin: 0% 50%;
+}
+.bow-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
+}
+.bow-tails {
+  position: absolute;
+  top: 54px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 64px;
+  z-index: 5;
+}
+
+.ribbon-seal {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  z-index: 7;
+  cursor: pointer;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.6));
+}
+.seal-svg {
   width: 100%;
   height: 100%;
   display: block;
 }
-/* Ribbon */
-.ribbon {
+.seal-sparkle {
   position: absolute;
-  left: 50%;
-  top: calc(50% + 2vh + min(80vw, 46vh, 460px) * 0.08);
-  width: min(100vw, 72vh, 720px);
-  height: 64px;
-  pointer-events: none;
-  z-index: 3;
-  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.5));
+  top: 10px;
+  right: 12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.85);
+  animation: sparkle-pulse 2.2s infinite;
 }
-.ribbon-band {
-  position: absolute;
-  top: 8px;
-  width: 50%;
-  height: 48px;
+@keyframes sparkle-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.3); }
 }
-.ribbon-band--left {
-  left: 0;
-  transform-origin: left center;
-}
-.ribbon-band--right {
-  right: 0;
-  transform-origin: right center;
-}
-.ribbon-bow {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 96px;
-  height: 96px;
-}
+
+/* Copy & Prompts */
 .intro-copy {
   position: absolute;
-  top: max(64px, 8vh);
+  top: max(48px, 6vh);
   left: 0;
   right: 0;
-  z-index: 6;
+  z-index: 8;
   text-align: center;
   pointer-events: none;
 }
 .intro-eyebrow {
   font-family: var(--font-heading);
-  font-size: clamp(0.72rem, 3.2vw, 0.95rem);
-  letter-spacing: 0.32em;
+  font-size: clamp(0.74rem, 2.8vw, 0.96rem);
+  letter-spacing: 0.38em;
   text-transform: uppercase;
-  color: var(--gold-light);
-  text-shadow: 0 0 12px rgba(241, 213, 138, 0.5);
+  color: var(--gold-pale);
+  text-shadow: 0 0 16px rgba(241, 213, 138, 0.7);
 }
 .intro-prompt {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: max(28px, env(safe-area-inset-bottom));
-  z-index: 6;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  z-index: 8;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
   font-family: var(--font-heading);
-  font-size: 0.8rem;
-  letter-spacing: 0.22em;
+  font-size: 0.82rem;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--gold-pale);
   pointer-events: none;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 .tap-ring {
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   border: 1.5px solid var(--gold-light);
   animation: ring 2s ease-out infinite;
 }
 @keyframes ring {
-  0% { transform: scale(0.7); opacity: 1; box-shadow: 0 0 0 0 rgba(241, 213, 138, 0.6); }
-  100% { transform: scale(1.1); opacity: 0.4; box-shadow: 0 0 0 18px rgba(241, 213, 138, 0); }
+  0% { transform: scale(0.75); opacity: 1; box-shadow: 0 0 0 0 rgba(241, 213, 138, 0.7); }
+  100% { transform: scale(1.2); opacity: 0.3; box-shadow: 0 0 0 20px rgba(241, 213, 138, 0); }
 }
 .intro-skip {
   position: absolute;
-  top: max(14px, env(safe-area-inset-top));
-  right: 14px;
-  z-index: 7;
-  padding: 8px 14px;
+  top: max(16px, env(safe-area-inset-top));
+  right: 18px;
+  z-index: 10;
+  padding: 8px 16px;
   border-radius: 999px;
-  border: 1px solid rgba(241, 213, 138, 0.4);
-  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(241, 213, 138, 0.5);
+  background: rgba(18, 4, 10, 0.65);
+  backdrop-filter: blur(8px);
   color: var(--gold-light);
   font-family: var(--font-heading);
-  font-size: 0.66rem;
-  letter-spacing: 0.16em;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   cursor: pointer;
+  transition: background 0.3s, border-color 0.3s;
 }
+.intro-skip:hover {
+  background: rgba(45, 10, 24, 0.85);
+  border-color: var(--gold-pale);
+}
+
+/* Durbar Names Presentation */
 .intro-names {
   position: absolute;
   inset: 0;
-  z-index: 6;
+  z-index: 9;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 28px;
+  gap: 24px;
+  pointer-events: none;
+}
+.intro-names-backdrop {
+  position: absolute;
+  width: min(92vw, 680px);
+  height: min(70vh, 520px);
+  border-radius: 50% 50% 24px 24px / 28% 28% 24px 24px;
+  background: radial-gradient(ellipse at 50% 50%, rgba(20, 4, 10, 0.82) 0%, rgba(30, 6, 15, 0.65) 55%, transparent 85%);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(246, 220, 149, 0.25);
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
   pointer-events: none;
 }
 .intro-names > * {
   pointer-events: auto;
 }
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: none; }
+.intro-wedding-date {
+  font-family: var(--font-heading);
+  font-size: clamp(0.85rem, 3.2vw, 1.15rem);
+  letter-spacing: 0.28em;
+  color: var(--gold-pale);
+  text-transform: uppercase;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+.intro-enter {
+  font-size: 0.85rem;
+  padding: 13px 32px;
+  border-radius: 999px;
+  box-shadow: 0 6px 28px rgba(201, 162, 74, 0.45);
+  cursor: pointer;
 }
 
-/* Name reveal */
+/* Name Reveal Styling */
 .name-reveal {
   display: flex;
   flex-direction: column;
   align-items: center;
   line-height: 1;
-  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 24px rgba(241, 213, 138, 0.35));
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 28px rgba(241, 213, 138, 0.4));
 }
 .name-line {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 15vw, 6.5rem);
-  letter-spacing: 0.06em;
+  font-size: clamp(2.8rem, 11vw, 5.8rem);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  white-space: nowrap !important;
+  word-break: keep-all;
 }
 .name-weds {
   display: inline-block;
   font-family: var(--font-script);
-  font-size: clamp(2rem, 10vw, 3.6rem);
+  font-size: clamp(2rem, 8vw, 3.8rem);
   color: var(--gold-pale);
   margin: -0.05em 0 0.05em;
   text-transform: none;
   -webkit-text-fill-color: currentColor;
 }
-/* the gradient needs to live on each letter so it survives inline-block */
 .name-letter {
   display: inline-block;
+  white-space: pre;
 }
 .name-line .name-letter {
   background: inherit;
@@ -601,10 +861,12 @@ button.photo-frame {
   color: transparent;
 }
 .name-reveal--compact .name-line {
-  font-size: clamp(2.6rem, 13vw, 5.2rem);
+  font-size: clamp(2.4rem, 9.5vw, 4.6rem);
+  white-space: nowrap !important;
+  word-break: keep-all;
 }
 
-/* ═════════ Main + hero ═════════ */
+/* ═════════ Scene 2: Royal Hero with Grand Mahal Background ═════════ */
 .main--behind-intro {
   visibility: hidden;
   height: 100vh;
@@ -616,92 +878,214 @@ button.photo-frame {
 @keyframes page-in {
   from { opacity: 0; }
 }
-.hero-glow {
-  position: absolute !important;
-  inset: 0;
-  max-width: none !important;
-  background: radial-gradient(ellipse at 50% 38%, rgba(255, 215, 122, 0.28), transparent 55%);
-  pointer-events: none;
-}
-.hero::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 90px;
-  max-width: none;
-  background: linear-gradient(180deg, transparent, var(--blush));
-  pointer-events: none;
-}
-.hero {
+
+.hero--royal-mahal {
+  position: relative;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background:
-    radial-gradient(ellipse at 50% 100%, var(--burgundy), transparent 70%),
-    var(--plum);
+  align-items: center;
+  padding: clamp(80px, 12vh, 120px) var(--gutter) clamp(40px, 8vh, 60px);
+  overflow: hidden;
+  background: #0d0206;
 }
+
+/* Full Bleed Royal Mahal Backdrop */
+.hero-mahal-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+.hero-mahal-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 42%;
+  transform: scale(1.02);
+}
+.hero-mahal-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(13, 2, 6, 0.55) 0%, rgba(36, 9, 26, 0.35) 45%, rgba(13, 2, 6, 0.85) 100%),
+    radial-gradient(ellipse at 50% 50%, transparent 20%, rgba(13, 2, 6, 0.6) 80%);
+  pointer-events: none;
+}
+.hero-glow {
+  position: absolute !important;
+  inset: 0;
+  max-width: none !important;
+  background: radial-gradient(ellipse at 50% 48%, rgba(255, 215, 122, 0.28), transparent 60%);
+  pointer-events: none;
+}
+
 .hero-toran {
   position: absolute !important;
   top: 0;
   left: 0;
   width: 100%;
   max-width: none !important;
-  height: 50px;
+  height: 54px;
+  z-index: 4;
 }
+.hero-petals {
+  z-index: 3;
+}
+
+/* Ornate Royal Jharokha Pavilion Arch */
 .hero-arch {
-  padding: 96px 18px 44px;
-  border: 1.5px solid var(--gold);
-  border-radius: 999px 999px 10px 10px;
-  box-shadow: 0 0 0 6px rgba(201, 162, 74, 0.12), inset 0 0 60px rgba(201, 162, 74, 0.12);
-  width: min(100%, 460px);
-}
-.hero-arch .eyebrow {
-  margin-bottom: 22px;
-  letter-spacing: 0.2em;
-  font-size: 0.66em;
-}
-.hero-places {
-  font-family: var(--font-heading);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  color: var(--gold-light);
-}
-.hero-places span {
-  margin: 0 8px;
-  color: var(--gold);
-}
-.hero-date {
-  margin-top: 10px;
-  font-family: var(--font-heading);
-  letter-spacing: 0.14em;
-}
-.scroll-cue {
-  margin-top: 36px;
-  display: block;
-  width: 26px;
-  height: 42px;
-  border: 1.5px solid var(--gold);
-  border-radius: 14px;
   position: relative;
+  z-index: 4;
+  width: min(100%, 540px);
+  margin: 0 auto;
+  padding: clamp(38px, 6vw, 56px) clamp(20px, 5vw, 36px) clamp(30px, 5vw, 44px);
+  background: radial-gradient(ellipse at 50% 25%, rgba(45, 10, 22, 0.68), rgba(20, 4, 10, 0.85));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(247, 225, 153, 0.65);
+  border-radius: 999px 999px 24px 24px;
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.75),
+    0 0 35px rgba(201, 162, 74, 0.2),
+    inset 0 0 45px rgba(201, 162, 74, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
-.scroll-cue span {
+
+.hero-ganesh-emblem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.hero-crest-svg {
+  width: 58px;
+  height: 58px;
+  filter: drop-shadow(0 2px 10px rgba(201, 162, 74, 0.45));
+}
+.hero-invocation {
+  font-family: var(--font-deva);
+  font-size: clamp(0.92rem, 3.4vw, 1.15rem);
+  color: var(--gold-pale);
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+  text-shadow: 0 0 12px rgba(241, 213, 138, 0.6);
+}
+
+.hero-eyebrow {
+  font-family: var(--font-heading);
+  font-size: clamp(0.72rem, 2.6vw, 0.88rem);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin: 12px 0 18px;
+  text-shadow: 0 0 10px rgba(241, 213, 138, 0.5);
+}
+
+.hero-divider {
+  width: min(220px, 60%);
+  margin: 10px auto 14px;
+}
+
+/* Romantic Royal Hero Quotes */
+.hero-quote-card {
+  margin: 10px 0 14px;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background: rgba(247, 225, 153, 0.1);
+  border: 1px solid rgba(247, 225, 153, 0.45);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 14px rgba(201, 162, 74, 0.2);
+}
+.hero-quote-main {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: clamp(1.05rem, 3.6vw, 1.35rem);
+  letter-spacing: 0.04em;
+  color: #fff2be;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+.hero-quote-sub {
+  font-family: var(--font-heading);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  font-size: clamp(0.76rem, 2.7vw, 0.92rem);
+  color: var(--gold-pale);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+.hero-quote-sub span {
+  margin: 0 6px;
+}
+.hero-diamond {
+  color: var(--gold-light);
+  font-size: 0.8em;
+}
+
+/* Smooth transition to the paper scene below */
+.hero::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 120px;
+  max-width: none;
+  background: linear-gradient(180deg, transparent 0%, rgba(13, 2, 6, 0.7) 60%, var(--blush) 100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Royal Scroll Cue */
+.scroll-cue {
+  position: relative;
+  z-index: 5;
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.scroll-cue-ring {
+  display: block;
+  width: 24px;
+  height: 38px;
+  border: 1.5px solid var(--gold);
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 0 10px rgba(201, 162, 74, 0.4);
+}
+.scroll-cue-ring::before {
+  content: '';
   position: absolute;
   left: 50%;
-  top: 8px;
-  width: 4px;
-  height: 8px;
-  margin-left: -2px;
+  top: 6px;
+  width: 3.5px;
+  height: 7px;
+  margin-left: -1.75px;
   border-radius: 2px;
   background: var(--gold-light);
   animation: scroll-dot 1.8s ease-in-out infinite;
 }
+.scroll-cue-label {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  opacity: 0.85;
+}
 @keyframes scroll-dot {
   0% { transform: translateY(0); opacity: 1; }
-  80% { transform: translateY(14px); opacity: 0; }
+  80% { transform: translateY(12px); opacity: 0; }
   100% { opacity: 0; }
 }
 
@@ -764,94 +1148,184 @@ button.photo-frame {
   margin: 0 auto;
 }
 
-/* ═════════ Scene 5: Scratch card ═════════ */
-.scratch-card {
+/* ═════════ Scene 5: Heart-Shaped Scratch Card ═════════ */
+.scratch-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 0;
+}
+.scratch-card--heart {
   position: relative;
   user-select: none;
   -webkit-user-select: none;
-  width: min(100%, 360px);
-  aspect-ratio: 4 / 3.6;
-  margin: 0 auto 22px;
-  border-radius: 16px;
-  padding: 8px;
-  background: linear-gradient(135deg, #8a6323, #f6dc95 35%, #c9a24a 60%, #8a6323);
-  box-shadow: 0 24px 50px rgba(110, 70, 82, 0.3);
+  width: min(92vw, 400px);
+  aspect-ratio: 1 / 1.08;
+  margin: 0 auto;
+  filter: drop-shadow(0 20px 45px rgba(50, 8, 18, 0.45));
+  transition: transform 0.4s var(--ease-out);
 }
-.scratch-content {
+.scratch-card--heart:hover {
+  transform: scale(1.02);
+}
+
+.scratch-content--heart {
   position: absolute;
-  inset: 8px;
-  border-radius: 10px;
-  background: radial-gradient(ellipse at center, #fffaf6, var(--blush) 60%, var(--petal));
-  color: var(--mauve);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  clip-path: url(#scratchHeartClip);
+  -webkit-clip-path: url(#scratchHeartClip);
+  background:
+    radial-gradient(circle at 50% 28%, #4e0818 0%, #2b040d 68%, #140105 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16px;
-  gap: 2px;
+  padding: 38px 24px 36px;
+  gap: 3px;
+  text-align: center;
+  box-shadow:
+    inset 0 0 50px rgba(0, 0, 0, 0.75),
+    inset 0 0 20px rgba(201, 162, 74, 0.25);
 }
-.scratch-weekday,
+
+.scratch-tagline {
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 2px;
+  text-shadow: 0 0 10px rgba(241, 213, 138, 0.6);
+}
+
+.scratch-couple-names {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 2px 0 4px;
+}
+.scratch-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 5vw, 1.95rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.scratch-heart-icon {
+  color: #e63946;
+  font-size: 1.4rem;
+  filter: drop-shadow(0 0 8px rgba(230, 57, 70, 0.7));
+  animation: heart-beat 1.6s ease-in-out infinite;
+}
+@keyframes heart-beat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.28); }
+}
+
+.scratch-date-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+  margin: 2px 0;
+}
+.scratch-weekday {
+  font-family: var(--font-heading);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+  color: #ffffff;
+  opacity: 0.95;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+.scratch-day {
+  font-family: var(--font-display);
+  font-size: clamp(3.6rem, 11vw, 4.6rem);
+  line-height: 1;
+  font-weight: 700;
+  margin: 1px 0;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 20px rgba(241, 213, 138, 0.45));
+}
 .scratch-month {
   font-family: var(--font-heading);
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  font-size: 0.85rem;
-  color: var(--burgundy);
-}
-.scratch-day {
-  font-family: var(--font-display);
-  font-size: 4.4rem;
-  line-height: 1;
-  filter: drop-shadow(0 2px 0 rgba(90, 15, 30, 0.25));
-}
-.scratch-muhurat {
+  font-size: 0.94rem;
+  color: var(--gold-pale);
   font-weight: 600;
-  color: var(--burgundy-2);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
 }
-.scratch-message {
-  font-family: var(--font-script);
-  font-size: 1.4rem;
-  margin-top: 4px;
-}
-.countdown {
+
+.scratch-muhurat-pill {
+  margin: 4px 0;
+  padding: 4px 18px;
+  border-radius: 999px;
+  background: rgba(201, 162, 74, 0.2);
+  border: 1px solid rgba(246, 220, 149, 0.55);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   font-family: var(--font-heading);
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  color: #fff2be;
   text-transform: uppercase;
-  color: var(--gold-ink);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
-.countdown-num {
-  font-size: 1.3rem;
+
+.countdown--heart {
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-top: 3px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+.countdown--heart .countdown-num {
+  font-size: 1.28rem;
   letter-spacing: 0.05em;
-  color: var(--burgundy);
+  color: #ffffff;
+  font-weight: 700;
+  margin-right: 4px;
 }
-.scratch-canvas {
+
+.scratch-canvas--heart {
   position: absolute;
-  inset: 8px;
-  width: calc(100% - 16px);
-  height: calc(100% - 16px);
-  border-radius: 10px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  clip-path: url(#scratchHeartClip);
+  -webkit-clip-path: url(#scratchHeartClip);
   touch-action: none;
   cursor: grab;
+  z-index: 4;
 }
 .scratch-card.is-revealed .scratch-canvas {
   pointer-events: none;
 }
-.sparkles {
+
+.scratch-heart-frame {
   position: absolute;
-  left: 50%;
-  top: 42%;
+  inset: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
   pointer-events: none;
+  z-index: 5;
 }
-.spark {
+
+.scratch-confetti-canvas {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  margin: -5px;
-  background: var(--gold);
-  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
-  opacity: 0;
+  inset: -50px;
+  width: calc(100% + 100px);
+  height: calc(100% + 100px);
+  pointer-events: none;
+  z-index: 10;
 }
+
 .paper .btn--ghost {
   color: var(--mauve);
   background: transparent;
@@ -1572,37 +2046,85 @@ button.photo-frame {
   height: 11px;
 }
 
-/* ═════════ Music vinyl ═════════ */
-.vinyl {
+/* ═════════ Royal Wedding Music Player ═════════ */
+.royal-music-btn {
   position: fixed;
-  right: 14px;
-  bottom: max(16px, env(safe-area-inset-bottom));
-  z-index: 51;
-  width: 52px;
-  height: 52px;
+  right: 18px;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 52;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: 0;
+  border: 1.5px solid var(--gold);
+  background: radial-gradient(circle at 35% 35%, #4a0f1d, #1f040b);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.55),
+    0 0 16px rgba(201, 162, 74, 0.35);
   cursor: pointer;
-  background: repeating-radial-gradient(circle, #111 0 2px, #222 2px 4px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
   display: grid;
   place-items: center;
-  animation: spin 3s linear infinite;
-  animation-play-state: paused;
+  transition: transform 0.25s, box-shadow 0.25s;
 }
-.vinyl.is-playing {
-  animation-play-state: running;
+.royal-music-btn:hover {
+  transform: scale(1.08);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.65),
+    0 0 22px rgba(201, 162, 74, 0.5);
 }
-.vinyl-label {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #222 0 2px, var(--gold) 3px);
+.royal-music-btn:active {
+  transform: scale(0.95);
 }
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.music-icon {
+  font-size: 1.3rem;
+  color: var(--gold-pale);
+  text-shadow: 0 0 8px rgba(246, 220, 149, 0.7);
+  display: block;
+  line-height: 1;
+}
+.royal-music-btn.is-playing {
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(201, 162, 74, 0.6), 0 6px 20px rgba(0, 0, 0, 0.55); }
+  70% { box-shadow: 0 0 0 12px rgba(201, 162, 74, 0), 0 6px 20px rgba(0, 0, 0, 0.55); }
+  100% { box-shadow: 0 0 0 0 rgba(201, 162, 74, 0), 0 6px 20px rgba(0, 0, 0, 0.55); }
+}
+
+/* ═════════ Royal Family Vector Art ═════════ */
+.family-card {
+  position: relative !important;
+  padding: 32px 24px 24px !important;
+  border-radius: 16px !important;
+  background: rgba(255, 255, 255, 0.78) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(201, 162, 74, 0.35) !important;
+  box-shadow: 0 12px 36px rgba(110, 70, 82, 0.09), 0 0 0 1px rgba(255, 255, 255, 0.6) inset !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+.family-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 16px 42px rgba(110, 70, 82, 0.14), 0 0 0 1px rgba(201, 162, 74, 0.4) inset !important;
+}
+.family-vector-art {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-top: 24px !important;
+  padding-top: 16px !important;
+  border-top: 1px dashed rgba(201, 162, 74, 0.3) !important;
+}
+.family-art-svg {
+  width: 140px !important;
+  max-width: 100% !important;
+  height: auto !important;
+  opacity: 0.9 !important;
+  filter: drop-shadow(0 2px 8px rgba(184, 134, 11, 0.2)) !important;
+  transition: transform 0.4s ease, filter 0.4s ease !important;
+}
+.family-card:hover .family-art-svg {
+  transform: translateY(-2px) scale(1.05) !important;
+  filter: drop-shadow(0 4px 14px rgba(184, 134, 11, 0.38)) !important;
 }
 
 /* ═════════ Reduced motion ═════════ */

@@ -1,108 +1,95 @@
-/** One carved door leaf. The right leaf is the same artwork mirrored. */
+/**
+ * Authentic hand-carved Indian royal palace double doors.
+ * Left and right carved teakwood leaves with brass elephant knockers,
+ * opening in 3D perspective onto the grand illuminated Durbar Hall.
+ */
 function DoorLeaf({ side }: { side: 'left' | 'right' }) {
-  const studs: JSX.Element[] = [];
-  for (let i = 0; i < 13; i++) {
-    const y = 40 + i * 44;
-    studs.push(<circle key={`a${i}`} cx={12} cy={y} r={3.2} />, <circle key={`b${i}`} cx={188} cy={y} r={3.2} />);
-  }
-  const petals = Array.from({ length: 12 }, (_, i) => i * 30);
   return (
-    <svg
-      className="door-art"
-      viewBox="0 0 200 600"
-      preserveAspectRatio="none"
-      style={side === 'right' ? { transform: 'scaleX(-1)' } : undefined}
-      aria-hidden="true"
-    >
-      <defs>
-        <linearGradient id={`wood-${side}`} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#3a0b14" />
-          <stop offset="0.55" stopColor="#5e1322" />
-          <stop offset="1" stopColor="#2a0710" />
-        </linearGradient>
-        <linearGradient id={`gilt-${side}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#f6dc95" />
-          <stop offset="0.5" stopColor="#c9a24a" />
-          <stop offset="1" stopColor="#8a6323" />
-        </linearGradient>
-        <pattern id={`jali-${side}`} width="16" height="16" patternUnits="userSpaceOnUse">
-          <path d="M8 0 L16 8 L8 16 L0 8 Z" fill="none" stroke="#c9a24a" strokeOpacity="0.35" strokeWidth="0.8" />
-          <circle cx="8" cy="8" r="1.2" fill="#c9a24a" fillOpacity="0.5" />
-        </pattern>
-      </defs>
-      <rect width="200" height="600" fill={`url(#wood-${side})`} />
-      <rect x="4" y="4" width="192" height="592" fill="none" stroke={`url(#gilt-${side})`} strokeWidth="3" />
-      <g fill={`url(#gilt-${side})`}>{studs}</g>
-
-      {/* Upper ogee-arched panel with jali lattice */}
-      <path
-        d="M30 270 V110 C30 70 60 52 100 34 C140 52 170 70 170 110 V270 Z"
-        fill={`url(#jali-${side})`}
-        stroke={`url(#gilt-${side})`}
-        strokeWidth="3"
+    <div className={`door-leaf door-leaf--${side}`} aria-hidden="true">
+      <img
+        src="/media/royal-door-leaf.jpg"
+        alt=""
+        className="door-leaf-img"
+        style={side === 'right' ? { transform: 'scaleX(-1)' } : undefined}
       />
-      <path
-        d="M42 258 V114 C42 82 66 66 100 50 C134 66 158 82 158 114 V258 Z"
-        fill="none"
-        stroke="#c9a24a"
-        strokeOpacity="0.6"
-        strokeWidth="1.2"
-      />
-
-      {/* Central rosette */}
-      <g transform="translate(100 320)">
-        {petals.map((r) => (
-          <ellipse key={r} rx="6" ry="20" cy="-18" transform={`rotate(${r})`} fill={`url(#gilt-${side})`} fillOpacity="0.85" />
-        ))}
-        <circle r="13" fill="#5e1322" stroke={`url(#gilt-${side})`} strokeWidth="3" />
-        <circle r="5" fill="#f6dc95" />
-      </g>
-
-      {/* Lower panel */}
-      <rect x="30" y="368" width="140" height="196" rx="4" fill="none" stroke={`url(#gilt-${side})`} strokeWidth="3" />
-      <path d="M100 384 L154 466 L100 548 L46 466 Z" fill="none" stroke="#c9a24a" strokeOpacity="0.7" strokeWidth="1.5" />
-      <circle cx="100" cy="466" r="8" fill={`url(#gilt-${side})`} />
-
-      {/* Door-pull ring near the meeting edge */}
-      <g transform="translate(184 330)" fill="none" stroke={`url(#gilt-${side})`}>
-        <circle r="6" strokeWidth="4" />
-        <circle cy="16" r="12" strokeWidth="3" />
-      </g>
-    </svg>
+      <div className="door-leaf-overlay" />
+      <div className="door-leaf-edge-bevel" />
+    </div>
   );
 }
 
 /** Carved palace doorway. Opening is animated by RoyalIntro's GSAP timeline. */
 export function PalaceDoors() {
   return (
-    <div className="palace">
-      {/* Carved archway frame */}
-      <svg className="palace-frame" viewBox="0 0 100 160" preserveAspectRatio="none" aria-hidden="true">
-        <path
-          d="M-6 166 V46 C-6 16 30 4 50 -8 C70 4 106 16 106 46 V166"
-          fill="none"
-          stroke="#c9a24a"
-          strokeWidth="2.5"
-          vectorEffect="non-scaling-stroke"
-        />
-        <path
-          d="M-2 162 V48 C-2 22 30 9 50 -2 C70 9 102 22 102 48 V162"
-          fill="none"
-          stroke="#f6dc95"
-          strokeOpacity="0.55"
-          strokeWidth="1"
-          vectorEffect="non-scaling-stroke"
-        />
-      </svg>
+    <div className="palace" aria-hidden="true">
+      {/* Ornate Rajasthani Scalloped Archway Frame */}
+      <div className="palace-arch-frame">
+        <svg className="palace-arch-svg" viewBox="0 0 100 160" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="goldStone" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#d4af37" />
+              <stop offset="30%" stopColor="#f7e199" />
+              <stop offset="70%" stopColor="#c59835" />
+              <stop offset="100%" stopColor="#8a6323" />
+            </linearGradient>
+            <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+          {/* Multi-scalloped Royal Arch */}
+          <path
+            d="M 5 160 V 50 C 5 24 22 8 50 2 C 78 8 95 24 95 50 V 160"
+            fill="none"
+            stroke="url(#goldStone)"
+            strokeWidth="3"
+            filter="url(#goldGlow)"
+          />
+          <path
+            d="M 9 160 V 52 C 9 28 26 13 50 7 C 74 13 91 28 91 52 V 160"
+            fill="none"
+            stroke="rgba(247, 225, 153, 0.45)"
+            strokeWidth="1.2"
+          />
+        </svg>
 
+        {/* Decorative corner florals on the arch */}
+        <div className="arch-crest">
+          <svg viewBox="0 0 60 40" className="arch-crest-svg">
+            <path
+              d="M 30 5 C 20 18 10 24 0 28 C 12 28 24 24 30 35 C 36 24 48 28 60 28 C 50 24 40 18 30 5 Z"
+              fill="url(#goldStone)"
+            />
+            <circle cx="30" cy="18" r="3.5" fill="#fbe7a6" />
+          </svg>
+        </div>
+      </div>
+
+      {/* The 3D doorway opening */}
       <div className="doorway">
+        {/* The grand illuminated Durbar hall inside */}
+        <div className="doorway-durbar">
+          <img
+            src="/media/royal-palace-durbar.jpg"
+            alt="Royal Palace Durbar"
+            className="doorway-durbar-img"
+          />
+          <div className="doorway-durbar-glow" />
+        </div>
+
+        {/* Radiant golden threshold flare */}
         <div className="doorway-light" />
+
+        {/* Left and right 3D swinging door leaves */}
         <div className="door door--left">
           <DoorLeaf side="left" />
         </div>
         <div className="door door--right">
           <DoorLeaf side="right" />
         </div>
+
+        {/* Center door seam shadow */}
+        <div className="doorway-seam" />
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { wedding } from '../config/wedding';
 import { gsap, nameRevealTimeline, reducedMotion, useGSAP } from '../lib/gsap';
 import { CoupleNameReveal } from './CoupleNameReveal';
+import { FallingPetals } from './FallingPetals';
 import { GoldDust } from './GoldDust';
 import { Toran } from './Ornaments';
 import { PalaceDoors } from './PalaceDoors';
@@ -10,41 +11,9 @@ import { RibbonReveal } from './RibbonReveal';
 type Phase = 'closed' | 'opening' | 'revealed' | 'leaving';
 type Q = (selector: string) => Element[];
 
-/* ── Timeline pieces (seconds are relative to where each is placed) ── */
-
-function ribbonRelease(q: Q) {
-  return gsap
-    .timeline()
-    .to(q('.bow-loop--left'), { scaleX: 0.15, rotation: -25, transformOrigin: '100% 50%', duration: 0.5, ease: 'power2.in' }, 0)
-    .to(q('.bow-loop--right'), { scaleX: 0.15, rotation: 25, transformOrigin: '0% 50%', duration: 0.5, ease: 'power2.in' }, 0)
-    .to(q('.ribbon-bow'), { y: 170, rotation: 40, scale: 0.5, autoAlpha: 0, duration: 1, ease: 'power2.in' }, 0.3)
-    .to(q('.ribbon-band--left'), { xPercent: -30, y: 140, rotation: -35, autoAlpha: 0, transformOrigin: '0% 50%', duration: 1.3, ease: 'power2.in' }, 0.35)
-    .to(q('.ribbon-band--right'), { xPercent: 30, y: 140, rotation: 35, autoAlpha: 0, transformOrigin: '100% 50%', duration: 1.3, ease: 'power2.in' }, 0.35);
-}
-
-function doorsOpen(q: Q) {
-  return gsap
-    .timeline()
-    .to(q('.intro-copy'), { autoAlpha: 0, y: -20, duration: 0.6 }, 0)
-    .to(q('.door--left'), { rotationY: -108, filter: 'brightness(0.5)', duration: 2.4, ease: 'power3.inOut' }, 0)
-    .to(q('.door--right'), { rotationY: 108, filter: 'brightness(0.5)', duration: 2.4, ease: 'power3.inOut' }, 0)
-    .to(q('.doorway-light'), { autoAlpha: 1, duration: 1.6, ease: 'power1.out' }, 0.2);
-}
-
-function pushThroughAndReveal(q: Q) {
-  const names = q('.intro-names')[0];
-  return gsap
-    .timeline()
-    .to(q('.intro-stage'), { scale: 1.4, autoAlpha: 0.3, duration: 2.6, ease: 'power2.inOut' }, 0)
-    .to(q('.intro-bloom'), { autoAlpha: 1, duration: 2 }, 0)
-    .set(names, { autoAlpha: 1 }, 0.3)
-    .add(nameRevealTimeline(names), 0.3)
-    .from(q('.intro-enter'), { autoAlpha: 0, y: 16, duration: 1 }, '-=0.4');
-}
-
 /**
- * Scene 1 + 2: royal entrance → ribbon release → doors open → name reveal.
- * One GSAP master timeline; works with or without the separate intro video.
+ * Scene 1 + 2: Royal Palace Entrance → Ribbon Unties → Doors Swing Open in 3D → Grand Durbar Name Reveal.
+ * Masterfully synchronized GSAP timeline with realistic inertia and physical elegance.
  */
 export function RoyalIntro({ onDone }: { onDone: () => void }) {
   const { intro } = wedding;
@@ -60,26 +29,26 @@ export function RoyalIntro({ onDone }: { onDone: () => void }) {
   const { contextSafe } = useGSAP(
     () => {
       const q = gsap.utils.selector(root);
-      gsap.set(q('.door'), { transformPerspective: 1200 });
+      gsap.set(q('.doorway'), { perspective: 1400 });
+      gsap.set(q('.door'), { transformPerspective: 1200, transformStyle: 'preserve-3d' });
       gsap.set(q('.ribbon'), { xPercent: -50, yPercent: -50 });
-      gsap.set(q('.ribbon-bow'), { xPercent: -50, yPercent: -42 });
-      gsap.set(q('.intro-names, .doorway-light, .intro-bloom'), { autoAlpha: 0 });
+      gsap.set(q('.intro-names, .doorway-light, .intro-bloom, .seal-flare'), { autoAlpha: 0 });
       if (reducedMotion()) return;
 
-      // Entrance: palace emerges from the dark, garland drops, ribbon stretches across.
+      // Entrance: palace emerges with royal glow, garland drops, ribbon appears.
       gsap
         .timeline()
-        .from(q('.palace, .palace-video-spacer'), { autoAlpha: 0, scale: 0.9, duration: 1.8, ease: 'power2.out' })
-        .from(q('.intro-toran'), { yPercent: -100, duration: 1.2 }, 0.2)
-        .from(q('.lantern'), { y: -140, duration: 1.4, ease: 'bounce.out', stagger: 0.15 }, 0.3)
-        .from(q('.intro-eyebrow'), { autoAlpha: 0, y: 16, letterSpacing: '0.7em', duration: 1.6 }, 0.5)
-        .from(q('.ribbon'), { scaleX: 0, duration: 1.2, ease: 'power2.inOut' }, 0.9)
-        .from(q('.ribbon-bow'), { scale: 0, rotation: -90, duration: 0.9, ease: 'back.out(2)' }, 1.6)
-        .from(q('.intro-prompt'), { autoAlpha: 0, y: 20, duration: 1 }, 1.8);
+        .from(q('.palace, .palace-video-spacer'), { autoAlpha: 0, scale: 0.94, duration: 1.4, ease: 'power2.out' })
+        .from(q('.intro-toran'), { yPercent: -100, duration: 1 }, 0.1)
+        .from(q('.lantern'), { y: -120, duration: 1.2, ease: 'bounce.out', stagger: 0.12 }, 0.2)
+        .from(q('.intro-eyebrow'), { autoAlpha: 0, y: 14, letterSpacing: '0.45em', duration: 1.2 }, 0.3)
+        .from(q('.ribbon-fabric'), { scaleX: 0, duration: 0.9, ease: 'power2.inOut', transformOrigin: '50% 50%' }, 0.6)
+        .from(q('.ribbon-center'), { scale: 0, rotation: -45, duration: 0.8, ease: 'back.out(2)' }, 0.9)
+        .from(q('.intro-prompt'), { autoAlpha: 0, y: 16, duration: 0.8 }, 1.3);
 
-      // Idle life while waiting for the tap.
-      gsap.to(q('.ribbon-bow'), { rotation: 3, scale: 1.05, duration: 1.5, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 2.5 });
-      gsap.to(q('.lantern'), { rotation: 4, transformOrigin: '50% 0%', duration: 2.4, yoyo: true, repeat: -1, ease: 'sine.inOut', stagger: 0.7 });
+      // Gentle ambient breathing while waiting for the tap
+      gsap.to(q('.ribbon-seal'), { scale: 1.05, duration: 1.8, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 1.8 });
+      gsap.to(q('.lantern'), { rotation: 3.5, transformOrigin: '50% 0%', duration: 2.6, yoyo: true, repeat: -1, ease: 'sine.inOut', stagger: 0.6 });
     },
     { scope: root },
   );
@@ -90,28 +59,26 @@ export function RoyalIntro({ onDone }: { onDone: () => void }) {
     if (finished.current) return;
     finished.current = true;
     setPhase('leaving');
-    gsap.to(root.current, { autoAlpha: 0, scale: 1.06, duration: reducedMotion() ? 0.2 : 1, ease: 'power2.inOut', onComplete: onDone });
+    gsap.to(root.current, { autoAlpha: 0, scale: 1.05, duration: reducedMotion() ? 0.2 : 0.9, ease: 'power2.inOut', onComplete: onDone });
   });
 
   const revealNames = contextSafe(() => {
     if (namesShown.current) return;
     namesShown.current = true;
+    const names = q('.intro-names')[0];
     gsap
       .timeline()
-      .add(pushThroughAndReveal(q))
-      .call(() => setPhase('revealed'), [], 0.5)
-      .call(finish, [], '+=4.5');
-  });
-
-  const playDoors = contextSafe((delay: number) => {
-    gsap.timeline({ delay }).add(doorsOpen(q)).add(revealNames, 1.5);
+      .set(names, { autoAlpha: 1 })
+      .add(nameRevealTimeline(names))
+      .from(q('.intro-enter'), { autoAlpha: 0, y: 18, scale: 0.92, duration: 0.8, ease: 'back.out(1.5)' }, '-=0.3')
+      .call(() => setPhase('revealed'), [], 0.3)
+      .call(finish, [], '+=5.5');
   });
 
   const open = contextSafe(() => {
     if (phase !== 'closed') return;
     setPhase('opening');
-    gsap.killTweensOf(q('.ribbon-bow'));
-    gsap.to(q('.intro-prompt'), { autoAlpha: 0, duration: 0.4 });
+    gsap.killTweensOf(q('.ribbon-seal, .lantern, .intro-prompt'));
 
     if (reducedMotion()) {
       gsap.set(q('.ribbon, .intro-stage'), { autoAlpha: 0.2 });
@@ -120,12 +87,63 @@ export function RoyalIntro({ onDone }: { onDone: () => void }) {
       gsap.delayedCall(2.5, finish);
       return;
     }
-    if (showRibbon) ribbonRelease(q);
+
     if (useVideo && videoRef.current) {
       videoRef.current.play().catch(() => setVideoFailed(true));
-      return; // timeupdate drives the names; `ended` finishes
+      return;
     }
-    playDoors(0.9);
+
+    // Master Synchronized Opening Timeline
+    const master = gsap.timeline();
+
+    // Step 1: Prompt fades out, radiant golden burst at seal
+    master.to(q('.intro-prompt'), { autoAlpha: 0, duration: 0.25 }, 0);
+    master.to(q('.seal-flare'), { scale: 2.6, autoAlpha: 1, duration: 0.35, ease: 'power2.out' }, 0);
+    master.to(q('.seal-flare'), { autoAlpha: 0, duration: 0.4 }, 0.32);
+
+    // Step 2: Seal unties and dissolves with gold flash (0.05s - 0.45s)
+    master.to(q('.ribbon-seal'), { scale: 1.3, rotation: 12, autoAlpha: 0, duration: 0.38, ease: 'power2.in' }, 0.05);
+    master.to(q('.bow-loop--left'), { scale: 0.1, rotation: -30, autoAlpha: 0, duration: 0.32, ease: 'power2.in' }, 0.05);
+    master.to(q('.bow-loop--right'), { scale: 0.1, rotation: 30, autoAlpha: 0, duration: 0.32, ease: 'power2.in' }, 0.05);
+    master.to(q('.bow-tail'), { scaleY: 0, autoAlpha: 0, duration: 0.28, ease: 'power2.in' }, 0.05);
+
+    // Step 3: Silk ribbon bands part smoothly to left and right (0.12s - 0.7s)
+    master.to(
+      q('.ribbon-band--left'),
+      { xPercent: -110, y: 35, rotation: -16, autoAlpha: 0, duration: 0.65, ease: 'power2.in' },
+      0.12,
+    );
+    master.to(
+      q('.ribbon-band--right'),
+      { xPercent: 110, y: 35, rotation: 16, autoAlpha: 0, duration: 0.65, ease: 'power2.in' },
+      0.12,
+    );
+
+    // Step 4: Palace doors unlatch & swing open in 3D (starts at 0.32s - perfectly in sync as ribbon parts!)
+    master.to(q('.intro-copy'), { autoAlpha: 0, y: -20, duration: 0.5 }, 0.25);
+
+    master.to(
+      q('.door--left'),
+      { rotationY: -105, duration: 2.1, ease: 'power2.inOut', filter: 'brightness(0.65)' },
+      0.32,
+    );
+    master.to(
+      q('.door--right'),
+      { rotationY: 105, duration: 2.1, ease: 'power2.inOut', filter: 'brightness(0.65)' },
+      0.32,
+    );
+
+    // Golden light rays stream from inside the Durbar hall
+    master.to(q('.doorway-light'), { autoAlpha: 1, duration: 1.3, ease: 'power1.out' }, 0.45);
+    master.to(q('.doorway-durbar'), { scale: 1.14, duration: 2.4, ease: 'power2.out' }, 0.35);
+
+    // Step 5: Camera glides forward through the portal into the Durbar hall (1.1s - 2.8s)
+    master.to(q('.intro-stage'), { scale: 1.45, duration: 2.3, ease: 'power2.inOut' }, 1.1);
+    master.to(q('.intro-bloom'), { autoAlpha: 1, duration: 1.6 }, 1.2);
+    master.to(q('.palace-arch-frame'), { autoAlpha: 0.2, duration: 1.5 }, 1.3);
+
+    // Step 6: Royal Couple Names reveal inside the illuminated palace
+    master.call(revealNames, [], 1.6);
   });
 
   const onTimeUpdate = () => {
@@ -133,18 +151,20 @@ export function RoyalIntro({ onDone }: { onDone: () => void }) {
     if (v && v.currentTime >= intro.nameRevealAt) revealNames();
   };
 
-  // Video couldn't play after the tap → continue with the SVG doors.
   const fallbackStarted = useRef(false);
   useEffect(() => {
     if (videoFailed && phase === 'opening' && !fallbackStarted.current) {
       fallbackStarted.current = true;
-      playDoors(0.3);
+      open();
     }
-  }, [videoFailed, phase, playDoors]);
+  }, [videoFailed, phase, open]);
 
   return (
-    <div ref={root} className={`intro intro--${phase}`} role="dialog" aria-label="Wedding invitation opening">
+    <div ref={root} className={`intro intro--${phase}`} role="dialog" aria-label="Royal Wedding Invitation Opening">
+      {/* Royal Palace Gateway Ambience Backdrop */}
+      <div className="intro-palace-backdrop" />
       <div className="intro-vignette" />
+
       {useVideo ? (
         <video
           ref={videoRef}
@@ -162,15 +182,24 @@ export function RoyalIntro({ onDone }: { onDone: () => void }) {
         </video>
       ) : (
         <>
-          <Toran swags={4} className="intro-toran" />
+          <Toran swags={5} className="intro-toran" />
           <div className="lantern lantern--left" />
           <div className="lantern lantern--right" />
         </>
       )}
-      <GoldDust density={55} className="intro-dust" />
+
+      {/* Floating particles & falling rose petals */}
+      <GoldDust density={50} className="intro-dust" />
+      <FallingPetals count={24} className="intro-petals" />
       <div className="intro-bloom" />
 
-      <button className="intro-stage" onClick={open} aria-label="Tap to open the invitation" disabled={phase !== 'closed'}>
+      {/* The Central Royal Doorway Stage */}
+      <button
+        className="intro-stage"
+        onClick={open}
+        aria-label="Tap to open the royal wedding invitation"
+        disabled={phase !== 'closed'}
+      >
         {useVideo ? <div className="palace palace-video-spacer" /> : <PalaceDoors />}
         {showRibbon && <RibbonReveal />}
       </button>
@@ -179,16 +208,22 @@ export function RoyalIntro({ onDone }: { onDone: () => void }) {
         <p className="intro-eyebrow">A Royal Celebration of Love</p>
       </div>
 
+      {/* Names Revealed Inside the Durbar Hall */}
       <div className="intro-names" aria-live="polite">
+        <div className="intro-names-backdrop" />
         <CoupleNameReveal />
+        <p className="intro-wedding-date">
+          “Together Begins Forever”
+        </p>
         <button className="btn btn--gold intro-enter" onClick={finish} tabIndex={phase === 'revealed' ? 0 : -1}>
-          Enter the Celebration
+          Enter the Royal Celebration ✦
         </button>
       </div>
 
+      {/* Interactive Tap Prompt */}
       <p className="intro-prompt">
         <span className="tap-ring" aria-hidden="true" />
-        Tap to Open the Invitation
+        Tap to Open the Royal Invitation
       </p>
 
       <button className="intro-skip" onClick={finish}>

@@ -12,7 +12,7 @@
  *                to replace: when you know the real one, change sample('…') to '…'.
  *   • Keep the quotes '…' and the comma at the end of each line.
  */
-import { defineEvent, sample, type WeddingConfig } from './config/types';
+import { defineEvent, type WeddingConfig } from './config/types';
 
 // ─── Venues (written once, used by every function below) ─────────────
 
@@ -36,9 +36,9 @@ const GAURI_HALL = {
 export const wedding: WeddingConfig = {
   couple: {
     groomName: 'Harsh',
-    brideName: 'Drashti',
-    groomFullName: 'Harsh Patel',
-    brideFullName: 'Drashti Pokar',
+    brideName: 'Drasti',
+    groomFullName: 'Harsh Mavani',
+    brideFullName: 'Drasti Pokar',
     message:
       'Two hearts, two families and two cities — brought together by love, blessed by our elders, and ready to begin forever.',
     portrait: null, // { src: '/media/couple-portrait.jpg', alt: 'Harsh and Drashti' }
@@ -56,15 +56,12 @@ export const wedding: WeddingConfig = {
     {
       side: 'groom',
       heading: "The Groom's Family",
-      familyName: 'Patel Family',
+      familyName: 'Mavani Family',
       city: null,
-      father: 'Ramesh Patel',
-      mother: sample('Sunita Patel'),
+      father: 'Ramesh Mavani',
+      mother: 'Harsha Mavani',
       blessings: [
-        { relation: 'Grandparents', names: sample('Smt. Shantaben Patel & Shri Maganlal Patel') },
-        { relation: 'Uncle & Aunt', names: sample('Shri Suresh Patel & Smt. Geeta Patel') },
-        { relation: 'Brother & Bhabhi', names: sample('Rahul Patel & Neha Patel') },
-        { relation: 'Nieces & Nephews', names: sample('Diya, Krish & Aarav') },
+        { relation: 'Sister', names: 'Princy' },
       ],
       message: null,
       photo: null,
@@ -74,13 +71,10 @@ export const wedding: WeddingConfig = {
       heading: "The Bride's Family",
       familyName: 'Pokar Family',
       city: null,
-      father: 'Kantilal Pokar',
-      mother: sample('Manjula Pokar'),
+      father: 'Sanjay Pokar',
+      mother: 'Varsha Pokar',
       blessings: [
-        { relation: 'Grandparents', names: sample('Smt. Kamlaben Pokar & Shri Jivrajbhai Pokar') },
-        { relation: 'Uncle & Aunt', names: sample('Shri Mahesh Pokar & Smt. Rekha Pokar') },
-        { relation: 'Sister & Jiju', names: sample('Pooja Desai & Nirav Desai') },
-        { relation: 'Cousins', names: sample('Ansh, Riya & Meet') },
+        { relation: 'Brother', names: 'Vansh Pokar' },
       ],
       message: null,
       photo: null,
@@ -144,9 +138,9 @@ export const wedding: WeddingConfig = {
   // ─── Contacts ("For Any Assistance") ───────────────────────────────
   // Add phone numbers with +91 to show Call / WhatsApp buttons, e.g. phone: '+919800000000'
   contacts: [
-    { name: 'Deep Patel', label: null, phone: null },
-    { name: 'Nainesh Dholu', label: null, phone: null },
-    { name: 'Ansh Pokar', label: null, phone: null },
+    { name: 'Deep Patel', label: null, phone: '8879688815' },
+    { name: 'Nainesh Dholu', label: null, phone: '5600666455' },
+    { name: 'Ansh Pokar', label: null, phone: '9145120515' },
   ],
 
   // ─── RSVP ──────────────────────────────────────────────────────────
@@ -180,7 +174,7 @@ export const wedding: WeddingConfig = {
   // ─── Media (optional) ──────────────────────────────────────────────
   ganeshImage: null, // '/media/ganesh.png'
   gallery: [], // [{ src: '/media/gallery/1.jpg', alt: 'Harsh and Drashti' }]
-  music: { src: null, title: null }, // { src: '/media/song.mp3', title: '…' }
+  music: { src: '/media/ishk_meetha.mp3', title: 'Ishk Meetha' },
   intro: {
     videoSrc: null, // '/media/intro.mp4'
     videoWebmSrc: null,
