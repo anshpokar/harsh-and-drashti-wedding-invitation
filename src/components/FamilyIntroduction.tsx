@@ -5,10 +5,11 @@ import { gsap, onEnter, reducedMotion, useGSAP } from '../lib/gsap';
 import { Divider, Pending, PhotoFrame, SectionTitle } from './Ornaments';
 
 function hasContent(f: FamilySide) {
-  return Boolean(f.familyName || f.father || f.mother || f.blessings.length || f.message || f.photo);
+  return Boolean(f.familyName || f.father || f.mother || f.blessings.some((b) => !b.sample) || f.message || f.photo);
 }
 
 function FamilyCard({ family }: { family: FamilySide }) {
+  const blessings = family.blessings.filter((b) => showPlaceholders || !b.sample);
   return (
     <article className={`family-card family-card--${family.side}`}>
       <p className="eyebrow">{family.heading}</p>
@@ -24,13 +25,16 @@ function FamilyCard({ family }: { family: FamilySide }) {
           </div>
         ) : null}
         {!family.mother && <Pending label="Mother's name" block />}
-        {family.blessings.map((b) => (
+        {blessings.map((b) => (
           <div key={b.relation} className="blessing-group">
-            <dt>{b.relation}</dt>
+            <dt>
+              {b.relation}
+              {b.sample && <span className="pending sample-tag">sample</span>}
+            </dt>
             <dd>{b.names}</dd>
           </div>
         ))}
-        {!family.blessings.length && <Pending label="Grandparents, siblings, nieces & nephews" block />}
+        {!blessings.length && <Pending label="Grandparents, siblings, nieces & nephews" block />}
       </dl>
       {family.message && <p className="family-message">{family.message}</p>}
     </article>

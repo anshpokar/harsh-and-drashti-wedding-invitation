@@ -29,7 +29,7 @@ Production: `ADMIN_TOKEN=some-long-secret npm start`. This builds the site and s
 
 ### Still needed from the family
 
-Muhurat · mothers' names and the blessings list (grandparents, siblings, nieces and nephews) for both families · dates and times for Mandva & Mameru, Sangeet & Dandiya Night and the Reception · Gauri Hall's address and Google Maps pin link · travel and accommodation notes · contact numbers · couple, family and gallery photos · optional Ganesh artwork, music and intro video · RSVP deadline.
+Confirmed muhurat (11:30 AM is a placeholder) · mothers' names · real blessings names (the current ones are samples shown only in preview) · date and time for Sangeet & Dandiya Night and the Reception · Gauri Hall's address and Google Maps pin link · travel and accommodation notes · phone numbers for Deep Patel, Nainesh Dholu and Ansh Pokar · photos (optional; the illustrations stand in) · optional Ganesh artwork, music and intro video · RSVP deadline.
 
 ## RSVP
 

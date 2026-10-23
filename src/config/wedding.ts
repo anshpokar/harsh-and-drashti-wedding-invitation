@@ -22,6 +22,8 @@ export interface Photo {
 export interface BlessingGroup {
   relation: string;
   names: string;
+  /** Stand-in names: shown only in preview mode, never to guests. Remove once real names are in. */
+  sample?: boolean;
 }
 
 export interface FamilySide {
@@ -54,9 +56,10 @@ export interface WeddingEvent {
 }
 
 export interface Contact {
-  label: string;
   name: string;
-  phone: string; // with country code, e.g. '+919800000000'
+  label: string | null;
+  /** With country code, e.g. '+919800000000'. Without it, no Call / WhatsApp buttons. */
+  phone: string | null;
 }
 
 export interface WeddingConfig {
@@ -152,7 +155,8 @@ export const wedding: WeddingConfig = {
   destination: { city: 'Ahmedabad', state: 'Gujarat' },
 
   weddingDate: '2026-11-21',
-  muhurat: null, // e.g. 'Shubh Muhurat · 7:42 PM'
+  // PLACEHOLDER chosen for the design: confirm the real muhurat with your pandit.
+  muhurat: 'Shubh Muhurat · 11:30 AM',
   dateMessage: 'The day our forever begins.',
 
   // Widely recited Ganesh Vandana. Confirm with your family pandit before publishing.
@@ -177,7 +181,13 @@ export const wedding: WeddingConfig = {
       city: null,
       father: 'Ramesh Patel',
       mother: null,
-      blessings: [],
+      blessings: [
+        // SAMPLE names (preview only) — replace with the real family and delete `sample: true`.
+        { relation: 'Grandparents', names: 'Smt. Shantaben Patel & Shri Maganlal Patel', sample: true },
+        { relation: 'Uncle & Aunt', names: 'Shri Suresh Patel & Smt. Geeta Patel', sample: true },
+        { relation: 'Brother & Bhabhi', names: 'Rahul Patel & Neha Patel', sample: true },
+        { relation: 'Nieces & Nephews', names: 'Diya, Krish & Aarav', sample: true },
+      ],
       message: null,
       photo: null,
     },
@@ -188,7 +198,13 @@ export const wedding: WeddingConfig = {
       city: null,
       father: 'Kantilal Pokar',
       mother: null,
-      blessings: [],
+      blessings: [
+        // SAMPLE names (preview only) — replace with the real family and delete `sample: true`.
+        { relation: 'Grandparents', names: 'Smt. Kamlaben Pokar & Shri Jivrajbhai Pokar', sample: true },
+        { relation: 'Uncle & Aunt', names: 'Shri Mahesh Pokar & Smt. Rekha Pokar', sample: true },
+        { relation: 'Sister & Jiju', names: 'Pooja Desai & Nirav Desai', sample: true },
+        { relation: 'Cousins', names: 'Ansh, Riya & Meet', sample: true },
+      ],
       message: null,
       photo: null,
     },
@@ -204,10 +220,24 @@ export const wedding: WeddingConfig = {
    */
   events: [
     {
-      id: 'mandva-mameru',
-      name: 'Mandva & Mameru',
-      date: null,
-      startTime: null,
+      id: 'mandva',
+      name: 'Mandva',
+      date: '2026-11-20',
+      startTime: '08:00',
+      endTime: null,
+      venueName: 'Shree Kalki Tirthdham, Prernapith',
+      city: 'Ahmedabad',
+      address: 'Shree Karsandasji Maharaj Marg, Paldi Kankaj, Ahmedabad',
+      mapsUrl: VENUE_MAPS_URL,
+      dressCode: null,
+      description: null,
+      image: null,
+    },
+    {
+      id: 'mameru',
+      name: 'Mameru',
+      date: '2026-11-20',
+      startTime: '12:00',
       endTime: null,
       venueName: 'Shree Kalki Tirthdham, Prernapith',
       city: 'Ahmedabad',
@@ -235,7 +265,7 @@ export const wedding: WeddingConfig = {
       id: 'wedding',
       name: 'Wedding Ceremony',
       date: '2026-11-21',
-      startTime: null,
+      startTime: '11:30', // matches the placeholder muhurat above
       endTime: null,
       venueName: 'Shree Kalki Tirthdham, Prernapith',
       city: 'Ahmedabad',
@@ -270,7 +300,12 @@ export const wedding: WeddingConfig = {
     accommodation: null,
   },
 
-  contacts: [],
+  contacts: [
+    // Add phone numbers (with +91) to enable Call / WhatsApp buttons.
+    { name: 'Deep Patel', label: null, phone: null },
+    { name: 'Nainesh Dholu', label: null, phone: null },
+    { name: 'Ansh Pokar', label: null, phone: null },
+  ],
 
   gallery: [],
 
@@ -287,7 +322,7 @@ export const wedding: WeddingConfig = {
   rsvp: {
     enabled: true,
     endpoint: '/api/rsvp',
-    deadline: null,
+    deadline: '2026-11-15',
     askPhone: true,
     askDietary: true,
     askAccommodation: true,

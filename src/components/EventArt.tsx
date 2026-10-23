@@ -38,6 +38,35 @@ function Mandap() {
   );
 }
 
+/** Mameru: the maternal uncle's thali of folded sarees, coconut and diya. */
+function GiftThali() {
+  return (
+    <g>
+      <ellipse cx="100" cy="112" rx="58" ry="11" fill="#f6dc95" stroke="#b08a3e" strokeWidth="1.6" />
+      <ellipse cx="100" cy="110" rx="48" ry="7" fill="none" stroke="#b08a3e" strokeWidth="0.8" strokeDasharray="2 3" />
+      <g className="art-gifts">
+        <rect x="70" y="92" width="44" height="12" rx="2" fill="#c0392b" />
+        <rect x="74" y="80" width="38" height="12" rx="2" fill="#16a085" />
+        <rect x="78" y="68" width="32" height="12" rx="2" fill="#e8590c" />
+        {[98, 86, 74].map((y) => (
+          <line key={y} x1="70" x2="114" y1={y} y2={y} stroke="#f6dc95" strokeWidth="1.4" />
+        ))}
+      </g>
+      <g transform="translate(130 92)">
+        <ellipse cx="0" cy="6" rx="10" ry="9" fill="#8b5a2b" />
+        <path d="M-2 -2 q-8 -14 -2 -20 M2 -2 q8 -14 2 -20 M0 -2 q0 -16 0 -22" stroke="#3f7d3a" strokeWidth="2.4" fill="none" />
+      </g>
+      <g transform="translate(62 104)">
+        <path d="M-8 0 q8 6 16 0 Z" fill="#b08a3e" />
+        <path className="art-flame" style={{ transformOrigin: '0px 0px' }} d="M0 0 C-4 -4 -2 -9 0 -13 C2 -9 4 -4 0 0 Z" fill="#f39c12" />
+      </g>
+      <circle cx="100" cy="52" r="2.5" fill="#f6dc95" className="art-twinkle" />
+      <circle cx="84" cy="58" r="1.8" fill="#f6dc95" className="art-twinkle" />
+      <circle cx="118" cy="56" r="1.8" fill="#f6dc95" className="art-twinkle" />
+    </g>
+  );
+}
+
 function Dandiya() {
   return (
     <g strokeLinecap="round">
@@ -102,6 +131,8 @@ export function EventArt({ id, name }: { id: string; name: string }) {
   const key = `${id} ${name}`.toLowerCase();
   const art = /sangeet|dandiya|garba/.test(key) ? (
     <Dandiya />
+  ) : /mameru|mosalu/.test(key) ? (
+    <GiftThali />
   ) : /reception/.test(key) ? (
     <Chandelier />
   ) : /wedding|vivah|marriage|lagna/.test(key) ? (

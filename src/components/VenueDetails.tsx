@@ -121,16 +121,21 @@ export function VenueDetails() {
           {contacts.length ? (
             <ul className="contact-list">
               {contacts.map((c) => (
-                <li key={c.phone}>
+                <li key={c.name}>
                   <span>
-                    <strong>{c.name}</strong> · {c.label}
+                    <strong>{c.name}</strong>
+                    {c.label && <> · {c.label}</>}
                   </span>
-                  <span className="contact-actions">
-                    <a href={`tel:${c.phone}`}>Call</a>
-                    <a href={`https://wa.me/${c.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
-                      WhatsApp
-                    </a>
-                  </span>
+                  {c.phone ? (
+                    <span className="contact-actions">
+                      <a href={`tel:${c.phone}`}>Call</a>
+                      <a href={`https://wa.me/${c.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
+                        WhatsApp
+                      </a>
+                    </span>
+                  ) : (
+                    showPlaceholders && <span className="pending">Phone: to be provided</span>
+                  )}
                 </li>
               ))}
             </ul>
