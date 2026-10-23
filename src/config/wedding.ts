@@ -29,7 +29,8 @@ export interface FamilySide {
   heading: string;
   familyName: string | null;
   city: string | null;
-  parents: string | null;
+  father: string | null;
+  mother: string | null;
   /** Grandparents, siblings, nieces & nephews… in display order. */
   blessings: BlessingGroup[];
   message: string | null;
@@ -131,6 +132,9 @@ export interface WeddingConfig {
   closing: { invitation: string; blessing: string; tagline: string };
 }
 
+const VENUE_MAPS_URL =
+  'https://www.google.com/maps/place/Shree+Kalki+Tirthdham,+Prernapith/@22.8824021,72.5402187,17z/data=!4m14!1m7!3m6!1s0x395e8f6379907959:0x88d44690f75de31d!2sShree+Kalki+Tirthdham,+Prernapith!8m2!3d22.8823972!4d72.5427936!16s%2Fg%2F11sgnzc5d_!3m5!1s0x395e8f6379907959:0x88d44690f75de31d!8m2!3d22.8823972!4d72.5427936!16s%2Fg%2F11sgnzc5d_?entry=ttu';
+
 export const wedding: WeddingConfig = {
   previewMode: true,
 
@@ -169,9 +173,10 @@ export const wedding: WeddingConfig = {
     {
       side: 'groom',
       heading: "The Groom's Family",
-      familyName: 'Ramesh Patel',
+      familyName: 'Patel Family',
       city: null,
-      parents: null,
+      father: 'Ramesh Patel',
+      mother: null,
       blessings: [],
       message: null,
       photo: null,
@@ -179,9 +184,10 @@ export const wedding: WeddingConfig = {
     {
       side: 'bride',
       heading: "The Bride's Family",
-      familyName: 'Kantilal Pokar',
+      familyName: 'Pokar Family',
       city: null,
-      parents: null,
+      father: 'Kantilal Pokar',
+      mother: null,
       blessings: [],
       message: null,
       photo: null,
@@ -203,10 +209,10 @@ export const wedding: WeddingConfig = {
       date: null,
       startTime: null,
       endTime: null,
-      venueName: null,
-      city: null,
-      address: null,
-      mapsUrl: null,
+      venueName: 'Shree Kalki Tirthdham, Prernapith',
+      city: 'Ahmedabad',
+      address: 'Shree Karsandasji Maharaj Marg, Paldi Kankaj, Ahmedabad',
+      mapsUrl: VENUE_MAPS_URL,
       dressCode: null,
       description: null,
       image: null,
@@ -217,10 +223,10 @@ export const wedding: WeddingConfig = {
       date: null,
       startTime: null,
       endTime: null,
-      venueName: null,
-      city: null,
-      address: null,
-      mapsUrl: null,
+      venueName: 'Shree Kalki Tirthdham, Prernapith',
+      city: 'Ahmedabad',
+      address: 'Shree Karsandasji Maharaj Marg, Paldi Kankaj, Ahmedabad',
+      mapsUrl: VENUE_MAPS_URL,
       dressCode: null,
       description: null,
       image: null,
@@ -231,10 +237,10 @@ export const wedding: WeddingConfig = {
       date: '2026-11-21',
       startTime: null,
       endTime: null,
-      venueName: 'Tirthdham',
+      venueName: 'Shree Kalki Tirthdham, Prernapith',
       city: 'Ahmedabad',
-      address: null,
-      mapsUrl: null, // paste the exact Google Maps pin link here
+      address: 'Shree Karsandasji Maharaj Marg, Paldi Kankaj, Ahmedabad',
+      mapsUrl: VENUE_MAPS_URL,
       dressCode: null,
       description: null,
       image: null,
@@ -245,7 +251,7 @@ export const wedding: WeddingConfig = {
       date: null,
       startTime: null,
       endTime: null,
-      venueName: null,
+      venueName: 'Gauri Hall',
       city: 'Badlapur',
       address: null,
       mapsUrl: null,
@@ -256,9 +262,9 @@ export const wedding: WeddingConfig = {
   ],
 
   venue: {
-    name: 'Tirthdham',
-    address: null,
-    mapsUrl: null,
+    name: 'Shree Kalki Tirthdham, Prernapith',
+    address: 'Shree Karsandasji Maharaj Marg, Paldi Kankaj, Ahmedabad',
+    mapsUrl: VENUE_MAPS_URL,
     image: null,
     travelNotes: [],
     accommodation: null,

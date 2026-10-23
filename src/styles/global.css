@@ -1169,10 +1169,18 @@ button.photo-frame {
 .venue-name {
   margin-top: 6px;
   font-family: var(--font-heading);
-  font-size: clamp(1.8rem, 8vw, 2.4rem);
-  letter-spacing: 0.14em;
+  font-size: clamp(1.6rem, 7vw, 2.3rem);
+  line-height: 1.2;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--gold-ink);
+}
+.venue-name-sub {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.55em;
+  letter-spacing: 0.3em;
+  color: var(--mauve-soft);
 }
 .venue-lines {
   margin: 10px 0 20px;

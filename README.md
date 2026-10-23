@@ -29,7 +29,7 @@ Production: `ADMIN_TOKEN=some-long-secret npm start`. This builds the site and s
 
 ### Still needed from the family
 
-Muhurat · parents' names and the blessings list (grandparents, siblings, nieces and nephews) for both families · dates, times and venues for Mandva & Mameru, Sangeet & Dandiya Night and the Reception · Tirthdham's full address and exact Google Maps pin link · travel and accommodation notes · contact numbers · couple, family and gallery photos · optional Ganesh artwork, music and intro video · RSVP deadline.
+Muhurat · mothers' names and the blessings list (grandparents, siblings, nieces and nephews) for both families · dates and times for Mandva & Mameru, Sangeet & Dandiya Night and the Reception · Gauri Hall's address and Google Maps pin link · travel and accommodation notes · contact numbers · couple, family and gallery photos · optional Ganesh artwork, music and intro video · RSVP deadline.
 
 ## RSVP
 

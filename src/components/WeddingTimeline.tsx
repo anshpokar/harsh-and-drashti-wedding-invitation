@@ -12,7 +12,8 @@ function EventCard({ event, sample }: { event: WeddingEvent; sample: boolean }) 
   const parts = event.date ? dateParts(event.date) : null;
   const time = timeRange(event.startTime, event.endTime);
   const maps = eventMapsLink(event);
-  const place = [event.venueName, event.city].filter(Boolean).join(', ');
+  const place = event.venueName ?? event.city;
+  const placeDetail = event.address ?? (event.venueName ? event.city : null);
 
   const addToCalendar = () =>
     downloadFile(
@@ -47,7 +48,7 @@ function EventCard({ event, sample }: { event: WeddingEvent; sample: boolean }) 
       <div className="event-venue">
         <p className="eyebrow">Venue</p>
         <p className="event-place">{place || (showPlaceholders ? <Pending label="Venue" /> : TBA)}</p>
-        {event.address && <p className="event-address">{event.address}</p>}
+        {placeDetail && <p className="event-address">{placeDetail}</p>}
         {event.dressCode && (
           <p className="event-dress">
             <span className="eyebrow">Dress code</span> {event.dressCode}

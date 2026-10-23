@@ -5,7 +5,7 @@ import { gsap, onEnter, reducedMotion, useGSAP } from '../lib/gsap';
 import { Divider, Pending, PhotoFrame, SectionTitle } from './Ornaments';
 
 function hasContent(f: FamilySide) {
-  return Boolean(f.familyName || f.parents || f.blessings.length || f.message || f.photo);
+  return Boolean(f.familyName || f.father || f.mother || f.blessings.length || f.message || f.photo);
 }
 
 function FamilyCard({ family }: { family: FamilySide }) {
@@ -17,14 +17,13 @@ function FamilyCard({ family }: { family: FamilySide }) {
       <PhotoFrame photo={family.photo} shape="rect" label="Family photograph" className="family-photo" />
       <Divider />
       <dl className="blessing-list">
-        {family.parents ? (
+        {family.father || family.mother ? (
           <div className="blessing-group">
-            <dt>Parents</dt>
-            <dd>{family.parents}</dd>
+            <dt>{family.side === 'groom' ? 'Son of' : 'Daughter of'}</dt>
+            <dd>{[family.mother, family.father].filter(Boolean).join(' & ')}</dd>
           </div>
-        ) : (
-          <Pending label="Parents' names" block />
-        )}
+        ) : null}
+        {!family.mother && <Pending label="Mother's name" block />}
         {family.blessings.map((b) => (
           <div key={b.relation} className="blessing-group">
             <dt>{b.relation}</dt>

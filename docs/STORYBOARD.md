@@ -19,9 +19,9 @@ The reference video hasn't been analysed yet. See **§3** for the steps to follo
 | 5 | **Couple**: Harsh & Drashti, Harsh Patel · Drashti Pokar | `CoupleIntroduction` | Portrait lifts out of the arch; scrubbed photo parallax | |
 | 6 | **Save the Date** scratch card | `ScratchDateCard` | Foil dissolves, "21" pops elastically, spark burst, card wobble, "N days to go" counts up | Scratches / taps |
 | 7 | **Royal journey** map | `JourneyMap` | Coast draws, route draws while a traveller rides it (MotionPath), Ahmedabad pin pops, dashed **Reception** route draws back to Badlapur | Directions |
-| 8 | **With Blessings From**: Ramesh Patel / Kantilal Pokar | `FamilyIntroduction` | Cards slide in from both sides; relation groups stagger | |
-| 9 | **Wedding Events**: Mandva & Mameru · Sangeet & Dandiya Night · Wedding Ceremony (21 Nov, Tirthdham) · Reception (Badlapur) | `WeddingTimeline`, `EventArt` | Card rises, script name pops, illustration unveils, marigold strands drop; idle flame flicker, dandiya clash, chandelier sway; Ken Burns on scroll | View on Maps / Add to Calendar |
-| 10 | **Venue**: Tirthdham, Ahmedabad, skyline, reception venue | `VenueDetails`, `CitySkyline` | Venue name letter-spacing settles; skyline buildings rise out of the Sabarmati, reflection fades in, kite floats, ripples drift | View on Maps |
+| 8 | **With Blessings From**: Patel family (son of Ramesh Patel) / Pokar family (daughter of Kantilal Pokar) | `FamilyIntroduction` | Cards slide in from both sides; relation groups stagger | |
+| 9 | **Wedding Events**: Mandva & Mameru · Sangeet & Dandiya Night · Wedding Ceremony (21 Nov), all at Shree Kalki Tirthdham, Prernapith · Reception at Gauri Hall, Badlapur | `WeddingTimeline`, `EventArt` | Card rises, script name pops, illustration unveils, marigold strands drop; idle flame flicker, dandiya clash, chandelier sway; Ken Burns on scroll | View on Maps / Add to Calendar |
+| 10 | **Venue**: Shree Kalki Tirthdham, Prernapith (Paldi Kankaj, Ahmedabad), skyline, Gauri Hall reception venue | `VenueDetails`, `CitySkyline` | Venue name letter-spacing settles; skyline buildings rise out of the Sabarmati, reflection fades in, kite floats, ripples drift | View on Maps |
 | 11 | **Gallery** | `PhotoGallery` | Staggered reveals | Opens viewer |
 | 12 | **Kindly Respond** RSVP | `RSVPForm` | Heading writes itself in | Submits |
 | 13 | **Thank You** airmail letter | `ClosingInvitation` | Letter flies up, script writes in, postmark stamps, wax seal presses down, marigold petals fall while on screen | Replay |

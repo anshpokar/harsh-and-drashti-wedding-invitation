@@ -49,10 +49,18 @@ export function VenueDetails() {
       <div className="venue-block">
         <PhotoFrame photo={venue.image} shape="rect" label="Venue photograph" className="venue-photo" />
         <p className="eyebrow">Venue</p>
-        {venue.name ? <h2 className="venue-name">{venue.name}</h2> : <Pending label="Venue name" block />}
+        {venue.name ? (
+          <h2 className="venue-name">
+            {/* "Shree Kalki Tirthdham, Prernapith" → name with a smaller second line */}
+            {venue.name.split(', ')[0]}
+            {venue.name.includes(', ') && <span className="venue-name-sub">{venue.name.split(', ').slice(1).join(', ')}</span>}
+          </h2>
+        ) : (
+          <Pending label="Venue name" block />
+        )}
         <div className="venue-lines">
           {venue.address ? <address>{venue.address}</address> : <Pending label="Full address" block />}
-          <p className="venue-city">{destination.city}</p>
+          {!venue.address && <p className="venue-city">{destination.city}</p>}
           <p className="venue-region">
             {destination.state}, India
           </p>
@@ -70,6 +78,7 @@ export function VenueDetails() {
         <Reveal className="venue-also">
           <p className="eyebrow">{reception.name} venue</p>
           <p className="venue-also-name">{reception.venueName ?? (showPlaceholders ? <Pending label="Reception venue" /> : 'To be announced')}</p>
+          {reception.address && <address>{reception.address}</address>}
           <p className="venue-region">
             {origin.city}, {origin.state}
           </p>
