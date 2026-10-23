@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { wedding, type FamilySide } from '../config/wedding';
 import { resolveName } from '../lib/content';
-import { gsap, onEnter, reducedMotion, useGSAP } from '../lib/gsap';
+import { gsap, reducedMotion, useGSAP } from '../lib/gsap';
 import { Divider, SectionTitle } from './Ornaments';
 
 function hasContent(f: FamilySide) {
@@ -230,11 +230,24 @@ export function FamilyIntroduction() {
       gsap.utils.toArray<HTMLElement>('.family-card', ref.current).forEach((card, i) => {
         const q = gsap.utils.selector(card);
         gsap
-          .timeline({ scrollTrigger: onEnter(card, 'top 82%') })
-          .from(card, { autoAlpha: 0, x: i % 2 ? 60 : -60, rotation: i % 2 ? 2 : -2, duration: 1.2 })
-          .from(q('.family-name'), { autoAlpha: 0, letterSpacing: '0.5em', duration: 1.2 }, 0.3)
-          .from(q('.blessing-group'), { autoAlpha: 0, y: 14, stagger: 0.12, duration: 0.7 }, 0.6)
-          .from(q('.family-vector-art'), { autoAlpha: 0, scale: 0.8, duration: 0.9, ease: 'back.out(1.6)' }, 0.8);
+          .timeline({
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 92%',
+              once: true,
+            },
+          })
+          .from(card, {
+            autoAlpha: 0,
+            y: 32,
+            duration: 0.85,
+            delay: i * 0.12,
+            ease: 'power2.out',
+            clearProps: 'all',
+          })
+          .from(q('.family-name'), { autoAlpha: 0, letterSpacing: '0.25em', duration: 0.8 }, 0.2)
+          .from(q('.blessing-group'), { autoAlpha: 0, y: 10, stagger: 0.08, duration: 0.5 }, 0.35)
+          .from(q('.family-vector-art'), { autoAlpha: 0, scale: 0.9, duration: 0.7, ease: 'back.out(1.4)' }, 0.5);
       });
     },
     { scope: ref },

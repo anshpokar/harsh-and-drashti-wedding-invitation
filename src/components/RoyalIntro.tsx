@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { wedding } from '../config/wedding';
-import { gsap, nameRevealTimeline, reducedMotion, useGSAP } from '../lib/gsap';
+import { gsap, nameRevealTimeline, reducedMotion, ScrollTrigger, useGSAP } from '../lib/gsap';
 import { CoupleNameReveal } from './CoupleNameReveal';
 import { FallingPetals } from './FallingPetals';
 import { GoldDust } from './GoldDust';
@@ -59,7 +59,16 @@ export function RoyalIntro({ onDone }: { onDone: () => void }) {
     if (finished.current) return;
     finished.current = true;
     setPhase('leaving');
-    gsap.to(root.current, { autoAlpha: 0, scale: 1.05, duration: reducedMotion() ? 0.2 : 0.9, ease: 'power2.inOut', onComplete: onDone });
+    gsap.to(root.current, {
+      autoAlpha: 0,
+      scale: 1.05,
+      duration: reducedMotion() ? 0.2 : 0.9,
+      ease: 'power2.inOut',
+      onComplete: () => {
+        onDone();
+        ScrollTrigger.refresh();
+      },
+    });
   });
 
   const revealNames = contextSafe(() => {
