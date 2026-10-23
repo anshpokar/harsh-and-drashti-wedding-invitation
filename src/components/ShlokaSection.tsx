@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { wedding } from '../config/wedding';
-import { showPlaceholders } from '../lib/content';
 import { gsap, onEnter, reducedMotion, useGSAP } from '../lib/gsap';
 import { Divider, LotusEmblem } from './Ornaments';
 
@@ -54,9 +53,6 @@ export function ShlokaSection() {
           ))}
         </div>
         <p className="shloka-meaning">{shloka.meaning}</p>
-        {showPlaceholders && !shloka.verified && (
-          <p className="pending pending--block">Preview: shloka awaiting selection / pandit verification</p>
-        )}
       </div>
     </section>
   );

@@ -20,7 +20,7 @@ The reference video hasn't been analysed yet. See **§3** for the steps to follo
 | 6 | **Save the Date** scratch card | `ScratchDateCard` | Foil dissolves, "21" pops elastically, spark burst, card wobble, "N days to go" counts up | Scratches / taps |
 | 7 | **Royal journey** map | `JourneyMap` | Coast draws, route draws while a traveller rides it (MotionPath), Ahmedabad pin pops, dashed **Reception** route draws back to Badlapur | Directions |
 | 8 | **With Blessings From**: Patel family (son of Ramesh Patel) / Pokar family (daughter of Kantilal Pokar) | `FamilyIntroduction` | Cards slide in from both sides; relation groups stagger | |
-| 9 | **Wedding Events**: Mandva (20 Nov, 8 AM) · Mameru (20 Nov, 12 PM) · Sangeet & Dandiya Night · Wedding Ceremony (21 Nov, 11:30 AM placeholder muhurat), all at Shree Kalki Tirthdham, Prernapith · Reception at Gauri Hall, Badlapur | `WeddingTimeline`, `EventArt` | Card rises, script name pops, illustration unveils, marigold strands drop; idle flame flicker, dandiya clash, chandelier sway; Ken Burns on scroll | View on Maps / Add to Calendar |
+| 9 | **Wedding Events**: Mandva (20 Nov, 8 AM) · Mameru (20 Nov, 12 PM) · Sangeet & Dandiya Night (20 Nov, 7 PM) · Wedding Ceremony (21 Nov, 11:30 AM placeholder muhurat), all at Shree Kalki Tirthdham, Prernapith · Reception (22 Nov, 7 PM) at Gauri Hall, Badlapur | `WeddingTimeline`, `EventArt` | Card rises, script name pops, illustration unveils, marigold strands drop; idle flame flicker, dandiya clash, chandelier sway; Ken Burns on scroll | View on Maps / Add to Calendar |
 | 10 | **Venue**: Shree Kalki Tirthdham, Prernapith (Paldi Kankaj, Ahmedabad), skyline, Gauri Hall reception venue | `VenueDetails`, `CitySkyline` | Venue name letter-spacing settles; skyline buildings rise out of the Sabarmati, reflection fades in, kite floats, ripples drift | View on Maps |
 | 11 | **Gallery** | `PhotoGallery` | Staggered reveals | Opens viewer |
 | 12 | **Kindly Respond** RSVP | `RSVPForm` | Heading writes itself in | Submits |
@@ -32,7 +32,7 @@ No navigation bar: the invitation is one continuous scrolling card. If music is 
 ## 2. Separate cinematic entry video (optional)
 
 The site works fully without a video: the doors are pure SVG/CSS.
-If you produce a video, set `intro.videoSrc` in `src/config/wedding.ts`. The site then plays it after the tap and shows the HTML title over it at `intro.nameRevealAt` seconds.
+If you produce a video, set `intro.videoSrc` in `src/data.ts`. The site then plays it after the tap and shows the HTML title over it at `intro.nameRevealAt` seconds.
 
 ### Rules
 

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { wedding } from '../config/wedding';
-import { showPlaceholders } from '../lib/content';
 import { PhotoFrame, SectionTitle } from './Ornaments';
 import { Reveal } from './Reveal';
 
@@ -66,23 +65,17 @@ export function PhotoGallery() {
   const step = useCallback((d: number) => setOpen((i) => (i === null ? i : (i + d + gallery.length) % gallery.length)), [gallery.length]);
   const close = useCallback(() => setOpen(null), []);
 
-  if (!gallery.length && !showPlaceholders) return null;
+  if (!gallery.length) return null;
 
   return (
     <section id="gallery" className="scene paper gallery">
       <SectionTitle eyebrow="Moments" title="Our Story in Frames" />
       <div className="gallery-grid">
-        {gallery.length
-          ? gallery.map((p, i) => (
-              <Reveal key={p.src} className={`gallery-item gallery-item--${i % 5}`} delay={(i % 3) * 100}>
-                <PhotoFrame photo={p} shape="rect" label={p.alt} onClick={() => setOpen(i)} />
-              </Reveal>
-            ))
-          : ['Pre-wedding', 'Couple', 'Groom portrait', 'Bride portrait', 'Family'].map((label, i) => (
-              <Reveal key={label} className={`gallery-item gallery-item--${i % 5}`} delay={(i % 3) * 100}>
-                <PhotoFrame photo={null} shape="rect" label={`${label} photo`} />
-              </Reveal>
-            ))}
+        {gallery.map((p, i) => (
+          <Reveal key={p.src} className={`gallery-item gallery-item--${i % 5}`} delay={(i % 3) * 100}>
+            <PhotoFrame photo={p} shape="rect" label={p.alt} onClick={() => setOpen(i)} />
+          </Reveal>
+        ))}
       </div>
       {open !== null && <Lightbox index={open} onClose={close} onStep={step} />}
     </section>

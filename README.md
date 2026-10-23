@@ -18,18 +18,18 @@ Production: `ADMIN_TOKEN=some-long-secret npm start`. This builds the site and s
 
 ## Edit the content
 
-**Everything lives in `src/config/wedding.ts`.** You don't need to touch the UI code.
+**Every detail lives in one file: [`src/data.ts`](src/data.ts).** Names, dates, times, venues, contacts and the RSVP deadline are all there, with instructions at the top. You don't need to touch any other code.
 
-- Any field left as `null` counts as "to be provided".
-- While `previewMode: true`, missing details show as dashed *"…: to be provided"* labels, and a banner sits at the top.
-- **Set `previewMode: false` before sending the link.** Sections with no data (families, events, venue, gallery) are then hidden entirely, and no placeholder text is ever shown to guests.
+- Any field left as `null` is simply left out, or shows "To be announced" where a date, time or venue is expected.
+- Names wrapped in `sample('…')` are stand-ins. They display like any other name; the wrapper just marks them as ones to replace. Change `sample('Sunita Patel')` to `'Sunita Patel'` once the real name is known.
+- Each venue is written once at the top of the file and reused by every function held there.
 - Photos go in `public/media/` and are referenced as `'/media/file.jpg'`. Use real photos only. Resize them to about 1600px on the long edge and use WebP or JPEG at quality 80.
 - Add `public/media/og-image.jpg` (1200×630) to get a nice WhatsApp link preview.
 - Have the shloka checked by your pandit, then set `shloka.verified: true`.
 
 ### Still needed from the family
 
-Confirmed muhurat (11:30 AM is a placeholder) · mothers' names · real blessings names (the current ones are samples shown only in preview) · date and time for Sangeet & Dandiya Night and the Reception · Gauri Hall's address and Google Maps pin link · travel and accommodation notes · phone numbers for Deep Patel, Nainesh Dholu and Ansh Pokar · photos (optional; the illustrations stand in) · optional Ganesh artwork, music and intro video · RSVP deadline.
+Confirmed muhurat (11:30 AM is a placeholder) · real mothers' and blessings names (the current ones are `sample('…')` stand-ins) · Gauri Hall's address and Google Maps pin link · travel and accommodation notes · phone numbers for Deep Patel, Nainesh Dholu and Ansh Pokar · photos (optional; the illustrations stand in) · optional Ganesh artwork, music and intro video · RSVP deadline.
 
 ## RSVP
 

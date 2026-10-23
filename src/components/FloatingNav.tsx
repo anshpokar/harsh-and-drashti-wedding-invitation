@@ -27,12 +27,3 @@ export function MusicToggle() {
     </>
   );
 }
-
-export function PreviewBanner() {
-  if (!wedding.previewMode) return null;
-  return (
-    <div className="preview-banner" role="note">
-      Preview mode — dashed labels mark details still to be provided. Set <code>previewMode: false</code> before sharing.
-    </div>
-  );
-}

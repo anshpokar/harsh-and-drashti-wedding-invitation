@@ -1,39 +1,35 @@
 import { useRef } from 'react';
 import { wedding, type FamilySide } from '../config/wedding';
-import { showPlaceholders } from '../lib/content';
+import { resolveName } from '../lib/content';
 import { gsap, onEnter, reducedMotion, useGSAP } from '../lib/gsap';
-import { Divider, Pending, SectionTitle } from './Ornaments';
+import { Divider, SectionTitle } from './Ornaments';
 
 function hasContent(f: FamilySide) {
-  return Boolean(f.familyName || f.father || f.mother || f.blessings.some((b) => !b.sample) || f.message);
+  return Boolean(f.familyName || resolveName(f.father) || resolveName(f.mother) || f.blessings.some((b) => resolveName(b.names)) || f.message);
 }
 
 function FamilyCard({ family }: { family: FamilySide }) {
-  const blessings = family.blessings.filter((b) => showPlaceholders || !b.sample);
+  const parents = [resolveName(family.mother), resolveName(family.father)].filter((p) => p !== null);
+  const blessings = family.blessings.map((b) => ({ relation: b.relation, name: resolveName(b.names) })).filter((b) => b.name !== null);
   return (
     <article className={`family-card family-card--${family.side}`}>
       <p className="eyebrow">{family.heading}</p>
-      {family.familyName ? <h3 className="family-name">{family.familyName}</h3> : <Pending label="Family name" block />}
+      {family.familyName && <h3 className="family-name">{family.familyName}</h3>}
       {family.city && <p className="family-city">{family.city}</p>}
       <Divider />
       <dl className="blessing-list">
-        {family.father || family.mother ? (
+        {parents.length > 0 && (
           <div className="blessing-group">
             <dt>{family.side === 'groom' ? 'Son of' : 'Daughter of'}</dt>
-            <dd>{[family.mother, family.father].filter(Boolean).join(' & ')}</dd>
+            <dd>{parents.map((p) => p!.text).join(' & ')}</dd>
           </div>
-        ) : null}
-        {!family.mother && <Pending label="Mother's name" block />}
+        )}
         {blessings.map((b) => (
           <div key={b.relation} className="blessing-group">
-            <dt>
-              {b.relation}
-              {b.sample && <span className="pending sample-tag">sample</span>}
-            </dt>
-            <dd>{b.names}</dd>
+            <dt>{b.relation}</dt>
+            <dd>{b.name!.text}</dd>
           </div>
         ))}
-        {!blessings.length && <Pending label="Grandparents, siblings, nieces & nephews" block />}
       </dl>
       {family.message && <p className="family-message">{family.message}</p>}
     </article>
@@ -42,7 +38,7 @@ function FamilyCard({ family }: { family: FamilySide }) {
 
 /** Scene 7: "With Blessings From" — both families, relation by relation. */
 export function FamilyIntroduction() {
-  const families = wedding.families.filter((f) => showPlaceholders || hasContent(f));
+  const families = wedding.families.filter(hasContent);
   const ref = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -54,7 +50,7 @@ export function FamilyIntroduction() {
           .timeline({ scrollTrigger: onEnter(card, 'top 82%') })
           .from(card, { autoAlpha: 0, x: i % 2 ? 60 : -60, rotation: i % 2 ? 2 : -2, duration: 1.2 })
           .from(q('.family-name'), { autoAlpha: 0, letterSpacing: '0.5em', duration: 1.2 }, 0.3)
-          .from(q('.blessing-group, .pending'), { autoAlpha: 0, y: 14, stagger: 0.12, duration: 0.7 }, 0.6);
+          .from(q('.blessing-group'), { autoAlpha: 0, y: 14, stagger: 0.12, duration: 0.7 }, 0.6);
       });
     },
     { scope: ref },

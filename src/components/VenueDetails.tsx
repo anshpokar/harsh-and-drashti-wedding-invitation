@@ -1,9 +1,9 @@
 import { useRef } from 'react';
 import { wedding } from '../config/wedding';
-import { eventMapsLink, homecomingEvent, showPlaceholders, venueMapsLink } from '../lib/content';
+import { eventMapsLink, homecomingEvent, venueMapsLink } from '../lib/content';
 import { gsap, onEnter, reducedMotion, useGSAP } from '../lib/gsap';
 import { CitySkyline } from './CitySkyline';
-import { Divider, Pending, PhotoFrame } from './Ornaments';
+import { Divider, PhotoFrame } from './Ornaments';
 import { Reveal } from './Reveal';
 import { PinIcon } from './WeddingTimeline';
 
@@ -41,7 +41,7 @@ export function VenueDetails() {
   );
 
   const hasVenue = Boolean(venue.name || venue.address);
-  if (!hasVenue && !showPlaceholders && !contacts.length) return null;
+  if (!hasVenue && !contacts.length) return null;
   const receptionMaps = reception ? eventMapsLink(reception) : null;
 
   return (
@@ -55,11 +55,9 @@ export function VenueDetails() {
             {venue.name.split(', ')[0]}
             {venue.name.includes(', ') && <span className="venue-name-sub">{venue.name.split(', ').slice(1).join(', ')}</span>}
           </h2>
-        ) : (
-          <Pending label="Venue name" block />
-        )}
+        ) : null}
         <div className="venue-lines">
-          {venue.address ? <address>{venue.address}</address> : <Pending label="Full address" block />}
+          {venue.address && <address>{venue.address}</address>}
           {!venue.address && <p className="venue-city">{destination.city}</p>}
           <p className="venue-region">
             {destination.state}, India
@@ -77,7 +75,7 @@ export function VenueDetails() {
       {reception && (
         <Reveal className="venue-also">
           <p className="eyebrow">{reception.name} venue</p>
-          <p className="venue-also-name">{reception.venueName ?? (showPlaceholders ? <Pending label="Reception venue" /> : 'To be announced')}</p>
+          <p className="venue-also-name">{reception.venueName ?? 'To be announced'}</p>
           {reception.address && <address>{reception.address}</address>}
           <p className="venue-region">
             {origin.city}, {origin.state}
@@ -90,58 +88,48 @@ export function VenueDetails() {
         </Reveal>
       )}
 
-      {(venue.travelNotes.length > 0 || showPlaceholders) && (
+      {venue.travelNotes.length > 0 && (
         <Reveal className="info-block">
           <h3>Travelling to {destination.city}</h3>
           <Divider />
-          {venue.travelNotes.length ? (
-            <ul>
-              {venue.travelNotes.map((n) => (
-                <li key={n}>{n}</li>
-              ))}
-            </ul>
-          ) : (
-            <Pending label={`Travel guidance from ${origin.city} and elsewhere`} block />
-          )}
+          <ul>
+            {venue.travelNotes.map((n) => (
+              <li key={n}>{n}</li>
+            ))}
+          </ul>
         </Reveal>
       )}
 
-      {(venue.accommodation || showPlaceholders) && (
+      {venue.accommodation && (
         <Reveal className="info-block">
           <h3>Stay</h3>
           <Divider />
-          {venue.accommodation ? <p>{venue.accommodation}</p> : <Pending label="Accommodation (optional)" block />}
+          <p>{venue.accommodation}</p>
         </Reveal>
       )}
 
-      {(contacts.length > 0 || showPlaceholders) && (
+      {contacts.length > 0 && (
         <Reveal className="info-block">
           <h3 id="contacts">For Any Assistance</h3>
           <Divider />
-          {contacts.length ? (
-            <ul className="contact-list">
+          <ul className="contact-list">
               {contacts.map((c) => (
                 <li key={c.name}>
                   <span>
                     <strong>{c.name}</strong>
                     {c.label && <> · {c.label}</>}
                   </span>
-                  {c.phone ? (
+                  {c.phone && (
                     <span className="contact-actions">
                       <a href={`tel:${c.phone}`}>Call</a>
                       <a href={`https://wa.me/${c.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
                         WhatsApp
                       </a>
                     </span>
-                  ) : (
-                    showPlaceholders && <span className="pending">Phone: to be provided</span>
                   )}
                 </li>
               ))}
             </ul>
-          ) : (
-            <Pending label="Coordination contacts (optional)" block />
-          )}
         </Reveal>
       )}
     </section>

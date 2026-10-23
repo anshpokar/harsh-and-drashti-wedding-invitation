@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { wedding } from '../config/wedding';
 import { gsap, onEnter, reducedMotion, useGSAP } from '../lib/gsap';
-import { Divider, Pending, PhotoFrame } from './Ornaments';
+import { Divider, PhotoFrame } from './Ornaments';
 
 /** Scene 4: "Together with the blessings of our families" + portrait. */
 export function CoupleIntroduction() {
@@ -24,7 +24,7 @@ export function CoupleIntroduction() {
 
       // slow parallax drift on the photo while scrolling
       gsap.fromTo(
-        q('.couple-portrait img, .couple-portrait .photo-placeholder'),
+        q('.couple-portrait img'),
         { scale: 1.15, yPercent: -6 },
         { scale: 1, yPercent: 6, ease: 'none', scrollTrigger: { trigger: ref.current, start: 'top bottom', end: 'bottom top', scrub: true } },
       );
@@ -35,16 +35,18 @@ export function CoupleIntroduction() {
   return (
     <section ref={ref} id="couple" className="scene paper paper--alt couple">
       <p className="eyebrow">Together with the blessings of our families</p>
-      <div className="couple-portrait">
-        <PhotoFrame photo={couple.portrait} label="Couple portrait" monogram="H & D" />
-      </div>
+      {couple.portrait && (
+        <div className="couple-portrait">
+          <PhotoFrame photo={couple.portrait} label="Couple portrait" />
+        </div>
+      )}
       <h2 className="couple-names script-title">
         <span className="cn-part">{couple.groomName}</span> <span className="cn-part amp">&amp;</span>{' '}
         <span className="cn-part">{couple.brideName}</span>
       </h2>
       <div className="couple-fullnames">
-        {couple.groomFullName ? <p>{couple.groomFullName}</p> : <Pending label="Groom's full name" />}
-        {couple.brideFullName ? <p>{couple.brideFullName}</p> : <Pending label="Bride's full name" />}
+        {couple.groomFullName && <p>{couple.groomFullName}</p>}
+        {couple.brideFullName && <p>{couple.brideFullName}</p>}
       </div>
       <Divider />
       <p className="couple-message">{couple.message}</p>

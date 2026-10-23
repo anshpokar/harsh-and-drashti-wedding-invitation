@@ -1,14 +1,14 @@
 import { useRef, useState } from 'react';
-import { sampleEvents, wedding, type WeddingEvent } from '../config/wedding';
-import { coupleTitle, eventMapsLink, showPlaceholders } from '../lib/content';
+import { wedding, type WeddingEvent } from '../config/wedding';
+import { coupleTitle, eventMapsLink } from '../lib/content';
 import { buildIcs, dateParts, downloadFile, timeRange } from '../lib/format';
 import { gsap, onEnter, reducedMotion, useGSAP } from '../lib/gsap';
 import { EventArt } from './EventArt';
-import { Pending, SectionTitle } from './Ornaments';
+import { SectionTitle } from './Ornaments';
 
 const TBA = 'To be announced';
 
-function EventCard({ event, sample }: { event: WeddingEvent; sample: boolean }) {
+function EventCard({ event }: { event: WeddingEvent }) {
   // Fall back to the line-art motif if the illustration file is missing or fails to load.
   const [imageFailed, setImageFailed] = useState(false);
   const parts = event.date ? dateParts(event.date) : null;
@@ -34,15 +34,14 @@ function EventCard({ event, sample }: { event: WeddingEvent; sample: boolean }) 
 
   return (
     <li className="event-card">
-      {sample && <span className="pending">Sample card — design preview only</span>}
       <h3 className="event-name">{event.name}</h3>
       <p className="event-date">
-        {parts ? `${Number(parts.day)} ${parts.month} ${parts.year}` : showPlaceholders ? <Pending label="Date" /> : 'Date to be announced'}
+        {parts ? `${Number(parts.day)} ${parts.month} ${parts.year}` : 'Date to be announced'}
       </p>
       <p className="event-when">
         {parts && <span>{parts.weekday}</span>}
         {parts && <span aria-hidden="true"> • </span>}
-        <span>{time ?? (showPlaceholders ? <Pending label="Time" /> : 'Time to be announced')}</span>
+        <span>{time ?? 'Time to be announced'}</span>
       </p>
       <div className="event-visual">
         {event.image && !imageFailed ? (
@@ -53,7 +52,7 @@ function EventCard({ event, sample }: { event: WeddingEvent; sample: boolean }) 
       </div>
       <div className="event-venue">
         <p className="eyebrow">Venue</p>
-        <p className="event-place">{place || (showPlaceholders ? <Pending label="Venue" /> : TBA)}</p>
+        <p className="event-place">{place || TBA}</p>
         {placeDetail && <p className="event-address">{placeDetail}</p>}
         {event.dressCode && (
           <p className="event-dress">
@@ -88,8 +87,7 @@ export function PinIcon() {
 
 /** Scene 8: "Wedding Events" — one illustrated card per confirmed function. */
 export function WeddingTimeline() {
-  const useSamples = !wedding.events.length && showPlaceholders;
-  const events = useSamples ? sampleEvents : wedding.events;
+  const { events } = wedding;
   const ref = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -132,7 +130,7 @@ export function WeddingTimeline() {
       <SectionTitle eyebrow="The Celebrations" title="Wedding Events" />
       <ol className="event-list">
         {events.map((e) => (
-          <EventCard key={e.id} event={e} sample={useSamples} />
+          <EventCard key={e.id} event={e} />
         ))}
       </ol>
     </section>

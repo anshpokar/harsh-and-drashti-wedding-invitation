@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ClosingInvitation } from './components/ClosingInvitation';
 import { CoupleIntroduction } from './components/CoupleIntroduction';
 import { FamilyIntroduction } from './components/FamilyIntroduction';
-import { MusicToggle, PreviewBanner } from './components/FloatingNav';
+import { MusicToggle } from './components/FloatingNav';
 import { HeroNames } from './components/HeroNames';
 import { JourneyMap } from './components/JourneyMap';
 import { PhotoGallery } from './components/PhotoGallery';
@@ -36,7 +36,6 @@ export default function App() {
     <>
       {introOpen && <RoyalIntro onDone={closeIntro} />}
       <main className={introOpen ? 'main--behind-intro' : 'main--entered'} aria-hidden={introOpen}>
-        <PreviewBanner />
         {/* Scene order — see docs/STORYBOARD.md */}
         <HeroNames entered={!introOpen} />
         <ShlokaSection />

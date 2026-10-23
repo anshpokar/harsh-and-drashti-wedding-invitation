@@ -1,8 +1,5 @@
-import { wedding, type WeddingEvent } from '../config/wedding';
+import { wedding, type Name, type WeddingEvent } from '../config/wedding';
 import { mapsSearchUrl } from './format';
-
-/** Whether to render a labelled placeholder for a missing value. */
-export const showPlaceholders = wedding.previewMode;
 
 export const coupleTitle = `${wedding.couple.groomName} Weds ${wedding.couple.brideName}`;
 
@@ -34,4 +31,10 @@ export function daysToWedding(): number | null {
   const today = new Date(new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }));
   const diff = (new Date(wedding.weddingDate).getTime() - today.getTime()) / 86_400_000;
   return Math.round(diff);
+}
+
+/** Text of a name, whether real or a `sample('…')` stand-in. */
+export function resolveName(n: Name | null): { text: string } | null {
+  if (n === null) return null;
+  return { text: typeof n === 'string' ? n : n.sample };
 }

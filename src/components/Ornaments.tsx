@@ -1,6 +1,5 @@
 import { useRef, type CSSProperties, type ReactNode } from 'react';
 import type { Photo } from '../config/wedding';
-import { showPlaceholders } from '../lib/content';
 import { gsap, onEnter, reducedMotion, useGSAP } from '../lib/gsap';
 
 export function Divider({ className = '' }: { className?: string }) {
@@ -109,25 +108,11 @@ export function SectionTitle({ eyebrow, title, children }: { eyebrow?: string; t
   );
 }
 
-/** Dashed "to be provided" tag — only rendered in preview mode. */
-export function Pending({ label, block = false }: { label: string; block?: boolean }) {
-  if (!showPlaceholders) return null;
-  return (
-    <span className={`pending ${block ? 'pending--block' : ''}`} title="Preview placeholder — not shown to guests">
-      {label}: to be provided
-    </span>
-  );
-}
-
-/**
- * A gold-framed photograph. Without a supplied photo it shows a monogram
- * placeholder (preview mode only) — we never substitute generated faces.
- */
+/** A gold-framed photograph; renders nothing until a photo is supplied. */
 export function PhotoFrame({
   photo,
   shape = 'arch',
   label,
-  monogram,
   className = '',
   style,
   onClick,
@@ -135,27 +120,19 @@ export function PhotoFrame({
   photo: Photo | null;
   shape?: 'arch' | 'rect' | 'circle';
   label: string;
-  monogram?: string;
   className?: string;
   style?: CSSProperties;
   onClick?: () => void;
 }) {
-  if (!photo && !showPlaceholders) return null;
-  const inner = photo ? (
-    <img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" />
-  ) : (
-    <div className="photo-placeholder">
-      {monogram && <span className="monogram">{monogram}</span>}
-      <span className="pending">{label}: to be provided</span>
-    </div>
-  );
+  if (!photo) return null;
+  const inner = <img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" />;
   const Tag = onClick ? 'button' : 'div';
   return (
     <Tag
       className={`photo-frame photo-frame--${shape} ${className}`}
       style={style}
       onClick={onClick}
-      {...(onClick ? { type: 'button' as const, 'aria-label': `View ${photo?.alt ?? label}` } : {})}
+      {...(onClick ? { type: 'button' as const, 'aria-label': `View ${photo.alt || label}` } : {})}
     >
       {inner}
     </Tag>

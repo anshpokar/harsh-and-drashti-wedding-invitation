@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { wedding } from '../config/wedding';
-import { daysToWedding, showPlaceholders } from '../lib/content';
+import { daysToWedding } from '../lib/content';
 import { dateParts } from '../lib/format';
 import { gsap, reducedMotion, useGSAP } from '../lib/gsap';
 import { SectionTitle } from './Ornaments';
@@ -185,10 +185,10 @@ export function ScratchDateCard() {
           ) : (
             <>
               <p className="scratch-day gold-text">♥</p>
-              <p className="scratch-month">{showPlaceholders ? 'Wedding date: to be provided' : 'Date to be announced soon'}</p>
+              <p className="scratch-month">Date to be announced soon</p>
             </>
           )}
-          {muhurat ? <p className="scratch-muhurat">{muhurat}</p> : showPlaceholders && <p className="pending">Muhurat: to be provided</p>}
+          {muhurat && <p className="scratch-muhurat">{muhurat}</p>}
           <p className="scratch-message">{dateMessage}</p>
           {days !== null && days > 0 && (
             <p className="countdown">

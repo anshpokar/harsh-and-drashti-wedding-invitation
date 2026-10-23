@@ -139,37 +139,6 @@ p {
   opacity: 0.85;
 }
 
-/* Preview placeholders — dashed and labelled so they can't pass as real info */
-.pending {
-  display: inline-block;
-  font-family: system-ui, sans-serif;
-  font-size: 12px;
-  line-height: 1.3;
-  letter-spacing: 0.02em;
-  padding: 4px 8px;
-  border: 1px dashed currentColor;
-  border-radius: 4px;
-  opacity: 0.7;
-  font-style: normal;
-}
-.pending--block {
-  display: block;
-  margin: 8px auto;
-  width: fit-content;
-}
-.preview-banner {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  background: #1a1a1a;
-  color: #ffd76a;
-  font: 12px/1.4 system-ui, sans-serif;
-  padding: 6px var(--gutter);
-  text-align: center;
-}
-.preview-banner code {
-  color: #fff;
-}
 
 /* ═════════ Buttons ═════════ */
 .btn {
@@ -280,9 +249,6 @@ p {
 .paper .divider circle {
   fill: var(--gold-ink);
 }
-.paper .pending {
-  color: var(--mauve);
-}
 .paper-card {
   background: rgba(255, 255, 255, 0.55);
   border-radius: 14px;
@@ -317,15 +283,13 @@ p {
 button.photo-frame {
   cursor: zoom-in;
 }
-.photo-frame img,
-.photo-placeholder {
+.photo-frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 .photo-frame--arch,
-.photo-frame--arch img,
-.photo-frame--arch .photo-placeholder {
+.photo-frame--arch img {
   border-radius: 999px 999px 8px 8px;
 }
 .photo-frame--arch {
@@ -333,22 +297,6 @@ button.photo-frame {
 }
 .photo-frame--rect {
   aspect-ratio: 4 / 3;
-}
-.photo-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background:
-    repeating-linear-gradient(45deg, rgba(185, 132, 138, 0.1) 0 2px, transparent 2px 14px),
-    linear-gradient(180deg, #fbeeea, var(--petal));
-  color: var(--mauve);
-}
-.monogram {
-  font-family: var(--font-script);
-  font-size: clamp(2.6rem, 12vw, 4rem);
-  color: var(--gold-ink);
 }
 
 /* ═════════ Scene 1–2: Royal intro ═════════ */
@@ -1065,14 +1013,6 @@ button.photo-frame {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--mauve-soft);
-}
-.sample-tag {
-  margin-left: 8px;
-  padding: 1px 6px;
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  text-transform: none;
-  vertical-align: middle;
 }
 .blessing-group dd {
   margin: 4px 0 0;
